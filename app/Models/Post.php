@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
+
+class Post extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'excerpt',
+        'content',
+        'category',
+        'status',
+        'user_id'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    // Relationship with User
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Automatically generate slug from title
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($post) {
+            if (empty($post->slug)) {
+                $post->slug = Str::slug($post->title);
+
+                // Ensure slug is unique
+                $originalSlug = $post->slug;
+                $count = 1;
+                while (static::where('slug', $post->slug)->exists()) {
+                    $post->slug = $originalSlug . '-' . $count;
+                    $count++;
+                }
+            }
+        });
+
+        static::updating(function ($post) {
+            if ($post->isDirty('title') && empty($post->getOriginal('slug'))) {
+                $post->slug = Str::slug($post->title);
+            }
+        });
+    }
+
+    // Scopes for easier querying
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published');
+    }
+
+    public function scopeByCategory($query, $category)
+    {
+        return $query->where('category', $category);
+    }
+
+    public function scopeRecent($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
+
+    // Get excerpt or truncated content
+    public function getExcerptAttribute($value)
+    {
+        return $value ?: Str::limit(strip_tags($this->content), 150);
+    }
+}
