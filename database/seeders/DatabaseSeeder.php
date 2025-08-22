@@ -13,11 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create a default admin user if not exists
+        if (!User::where('email', 'admin@techdaily.com')->exists()) {
+            User::factory()->create([
+                'name' => 'TechDaily Admin',
+                'email' => 'admin@techdaily.com',
+            ]);
+        }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Create additional test users
+        User::factory(3)->create();
+
+        // Run PostSeeder
+        $this->call([
+            PostSeeder::class,
         ]);
+
+        $this->command->info('Database seeding completed successfully!');
     }
 }
