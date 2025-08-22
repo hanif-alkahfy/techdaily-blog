@@ -16,7 +16,7 @@ class Post extends Model
         'slug',
         'excerpt',
         'content',
-        'category',
+        'category_id',
         'status',
         'user_id'
     ];
@@ -64,9 +64,19 @@ class Post extends Model
         return $query->where('status', 'published');
     }
 
-    public function scopeByCategory($query, $category)
+    public function scopeDraft($query)
     {
-        return $query->where('category', $category);
+        return $query->where('status', 'draft');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function scopeByCategory($query, $categoryId)
+    {
+        return $query->where('category_id', $categoryId);
     }
 
     public function scopeRecent($query)

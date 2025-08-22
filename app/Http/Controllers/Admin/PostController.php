@@ -4,21 +4,51 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of posts
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::with('user')
-            ->recent()
-            ->paginate(10);
+        $query = Post::with(['user', 'category'])->latest();
 
-        return view('admin.posts.index', compact('posts'));
+        // Filter by status if provided
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by category if provided
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('title', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('content', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('excerpt', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        // Handle per page option
+        $perPage = $request->get('per_page', 10);
+        $posts = $query->paginate($perPage);
+        $categories = Category::all();
+
+        return view('admin.posts.index', [
+            'posts' => $posts,
+            'categories' => $categories,
+            'status' => $request->status,
+            'selectedCategory' => $request->category
+        ]);
     }
 
     /**
@@ -26,7 +56,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = $this->getCategories();
+        $categories = Category::all();
         return view('admin.posts.create', compact('categories'));
     }
 
@@ -37,15 +67,21 @@ class PostController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
-            'excerpt' => 'nullable|max:500',
+            'slug' => 'nullable|unique:posts',
+            'excerpt' => 'nullable',
             'content' => 'required',
-            'category' => 'required|max:100',
+            'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,published'
         ]);
 
-        $validated['user_id'] = Auth::id();
+        if (empty($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['title']);
+        }
 
-        Post::create($validated);
+        $post = Post::create([
+            ...$validated,
+            'user_id' => Auth::id()
+        ]);
 
         return redirect()->route('admin.posts.index')
             ->with('success', 'Post created successfully!');
@@ -64,7 +100,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        $categories = $this->getCategories();
+        $categories = Category::all();
         return view('admin.posts.edit', compact('post', 'categories'));
     }
 
@@ -75,11 +111,16 @@ class PostController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
-            'excerpt' => 'nullable|max:500',
+            'slug' => 'nullable|unique:posts,slug,' . $post->id,
+            'excerpt' => 'nullable',
             'content' => 'required',
-            'category' => 'required|max:100',
+            'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,published'
         ]);
+
+        if (empty($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['title']);
+        }
 
         $post->update($validated);
 
@@ -99,16 +140,34 @@ class PostController extends Controller
     }
 
     /**
-     * Get available categories
+     * Handle bulk actions on posts
      */
-    private function getCategories()
+    public function bulk(Request $request)
     {
-        return [
-            'Tutorial' => 'Tutorial',
-            'Opinion' => 'Opinion',
-            'Review' => 'Review',
-            'News' => 'News',
-            'Tips' => 'Tips'
-        ];
+        $validated = $request->validate([
+            'posts' => 'required|array',
+            'posts.*' => 'exists:posts,id',
+            'action' => 'required|in:delete,publish,draft'
+        ]);
+
+        $posts = Post::whereIn('id', $validated['posts']);
+
+        switch ($validated['action']) {
+            case 'delete':
+                $posts->delete();
+                $message = 'Selected posts have been deleted';
+                break;
+            case 'publish':
+                $posts->update(['status' => 'published']);
+                $message = 'Selected posts have been published';
+                break;
+            case 'draft':
+                $posts->update(['status' => 'draft']);
+                $message = 'Selected posts have been moved to drafts';
+                break;
+        }
+
+        return redirect()->route('admin.posts.index')
+            ->with('success', $message);
     }
 }

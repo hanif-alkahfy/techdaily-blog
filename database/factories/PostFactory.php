@@ -22,14 +22,13 @@ class PostFactory extends Factory
     public function definition(): array
     {
         $title = fake()->sentence(rand(4, 8));
-        $categories = ['Tutorial', 'Opinion', 'Review', 'News', 'Tips'];
 
         return [
             'title' => rtrim($title, '.'),
             'slug' => Str::slug($title),
             'excerpt' => fake()->paragraph(2),
             'content' => $this->generateContent(),
-            'category' => fake()->randomElement($categories),
+            'category_id' => \App\Models\Category::factory(),
             'status' => fake()->randomElement(['draft', 'published']),
             'user_id' => User::factory(),
             'created_at' => fake()->dateTimeBetween('-6 months', 'now'),

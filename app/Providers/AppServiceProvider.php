@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\Models\Post;
+use App\Models\Category;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,26 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Share data with admin layout
+        View::composer('layouts.admin', function ($view) {
+            $view->with([
+                'postsCount' => Post::count(),
+                'categories' => Category::all(),
+            ]);
+        });
+
+        // Share categories with post forms
+        View::composer(['admin.posts.create', 'admin.posts.edit'], function ($view) {
+            $view->with([
+                'categories' => Category::all(),
+            ]);
+        });
+
+        // Share categories with posts index for filtering
+        View::composer('admin.posts.index', function ($view) {
+            $view->with([
+                'categories' => Category::all(),
+            ]);
+        });
     }
 }

@@ -17,14 +17,14 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('excerpt')->nullable();
             $table->longText('content');
-            $table->string('category');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['draft', 'published'])->default('draft');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
             // Indexes untuk performance
             $table->index(['status', 'created_at']);
-            $table->index('category');
+            $table->index('category_id');
             $table->index('user_id');
         });
     }
