@@ -52,7 +52,7 @@ TechDaily Blog is a production-ready blogging platform that combines the power o
 
 | Component | Technology | Version |
 |-----------|------------|---------|
-| **Backend Framework** | Laravel | 10.x |
+| **Backend Framework** | Laravel | 12 |
 | **Database** | MySQL | 5.7+ |
 | **Frontend Framework** | Bootstrap | 5.x |
 | **CSS Framework** | TailwindCSS | 3.x |
@@ -120,8 +120,8 @@ TechDaily Blog is a production-ready blogging platform that combines the power o
    DB_HOST=127.0.0.1
    DB_PORT=3306
    DB_DATABASE=techdaily_blog
-   DB_USERNAME=your_username
-   DB_PASSWORD=your_password
+   DB_USERNAME=root
+   DB_PASSWORD=
    ```
 
 5. **Database Setup**
