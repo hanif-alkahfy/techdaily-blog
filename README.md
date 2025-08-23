@@ -110,7 +110,6 @@ Before starting, make sure you have:
 #### **Step 1: Clone the Repository** 📦
 
 ```bash
-# Clone the project to your local machine
 git clone https://github.com/hanif-alkahfy/techdaily-blog.git
 cd techdaily-blog
 ```
@@ -118,7 +117,6 @@ cd techdaily-blog
 #### **Step 2: Install PHP Dependencies** 🐘
 
 ```bash
-# This will download all Laravel dependencies
 composer install
 ```
 
@@ -127,7 +125,6 @@ composer install
 #### **Step 3: Install NPM Packages** 📦
 
 ```bash
-# Install frontend dependencies for asset compilation
 npm install
 ```
 
@@ -136,10 +133,8 @@ npm install
 #### **Step 4: Create and Configure Environment File** ⚙️
 
 ```bash
-# Create your environment configuration file
 cp .env.example .env
 
-# Generate a unique application key for security
 php artisan key:generate
 ```
 
@@ -188,16 +183,12 @@ sudo systemctl enable mysql  # To start automatically on boot
 #### **Step 7: Database Setup** 🏗️
 
 ```bash
-# Run the automatic setup command
-# This will:
-# - Create storage links
-# - Create required directories
-# - Run migrations and seeders
 php artisan setup:project
 ```
 
 > 🎉 **What happens here?**
 >
+> -   Create storage links
 > -   Creates all necessary database tables
 > -   Adds sample categories, posts, and an admin user
 > -   Links storage folder for image uploads
@@ -205,17 +196,12 @@ php artisan setup:project
 #### **Step 8: Asset Compilation** 🎨
 
 ```bash
-# For development (with hot reload)
-npm run dev
-
-# OR for production (optimized)
 npm run build
 ```
 
 #### **Step 9: Launch Application** 🚀
 
 ```bash
-# Start the Laravel development server
 php artisan serve
 ```
 
