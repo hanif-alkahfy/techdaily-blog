@@ -26,7 +26,7 @@
     </ol>
 </nav>
 
-<form method="POST" action="{{ route('admin.posts.store') }}" id="createPostForm" novalidate>
+<form method="POST" action="{{ route('admin.posts.store') }}" id="createPostForm" enctype="multipart/form-data" novalidate>
     @csrf
 
     <div class="row">
