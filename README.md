@@ -91,7 +91,7 @@ TechDaily Blog is a production-ready blogging platform that combines the power o
 -   **Caching**: Redis or Memcached
 -   **Web Server**: Nginx with PHP-FPM
 
-## 🚀 Installation Guide
+## Installation Guide
 
 Follow this step-by-step guide to get TechDaily Blog up and running on your local machine. The entire process takes about 10-15 minutes!
 
