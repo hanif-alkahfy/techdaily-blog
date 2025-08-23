@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         // Create admin user
         $this->command->info('👤 Creating admin user...');
         $admin = User::create([
-            'name' => 'Admin TechDaily',
+            'name' => 'Admin',
             'email' => 'admin@techdaily.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
