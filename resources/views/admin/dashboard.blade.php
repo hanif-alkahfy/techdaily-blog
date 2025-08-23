@@ -17,16 +17,6 @@
                                 Here's what's happening with your blog today. You have {{ $stats['total_posts'] }} posts total.
                             </p>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <div class="d-flex gap-2 justify-content-end">
-                                <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">
-                                    <i class="bi bi-plus-circle me-2"></i>New Post
-                                </a>
-                                <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-light">
-                                    <i class="bi bi-list-ul me-2"></i>All Posts
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -105,7 +95,7 @@
         </div>
 
         <!-- Recent Posts Table -->
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold">Recent Posts</h6>
@@ -161,61 +151,38 @@
             </div>
         </div>
 
-        <!-- Popular Posts -->
-        <div class="col-md-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold">Popular Posts</h6>
-                </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        @forelse($popular_posts as $post)
-                            <div class="list-group-item px-0">
-                                <h6 class="mb-1">{{ $post->title }}</h6>
-                                <small class="text-muted">
-                                    <i class="bi bi-person"></i> {{ $post->user->name }} |
-                                    <i class="bi bi-folder"></i> {{ $post->category->name }}
-                                </small>
-                            </div>
-                        @empty
-                            <div class="text-center py-3">No popular posts yet</div>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <!-- Quick Stats & Actions -->
-        <div class="col-lg-4">
+        <!-- Charts and Actions Row -->
+        <div class="row mb-4">
             <!-- Posts Chart -->
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-bottom-0">
-                    <h6 class="card-title mb-0">
-                        <i class="bi bi-pie-chart me-2 text-primary"></i>Posts Distribution
-                    </h6>
-                </div>
-                <div class="card-body text-center">
-                    <div class="position-relative d-inline-block">
-                        <canvas id="postsChart" width="150" height="150"></canvas>
-                        <div class="position-absolute top-50 start-50 translate-middle">
-                            <div class="text-center">
-                                <h4 class="mb-0">{{ $stats['total_posts'] }}</h4>
-                                <small class="text-muted">Total Posts</small>
-                            </div>
-                        </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-bottom-0">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-pie-chart me-2 text-primary"></i>Posts Distribution
+                        </h6>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <div class="text-center">
-                                <div class="fw-bold text-success">{{ $stats['published_posts'] }}</div>
-                                <small class="text-muted">Published</small>
+                    <div class="card-body text-center">
+                        <div class="position-relative d-inline-block">
+                            <canvas id="postsChart" width="150" height="150"></canvas>
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <div class="text-center">
+                                    <h4 class="mb-0">{{ $stats['total_posts'] }}</h4>
+                                    <small class="text-muted">Total Posts</small>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="text-center">
-                                <div class="fw-bold text-warning">{{ $stats['draft_posts'] }}</div>
-                                <small class="text-muted">Drafts</small>
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <div class="text-center">
+                                    <div class="fw-bold text-success">{{ $stats['published_posts'] }}</div>
+                                    <small class="text-muted">Published</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center">
+                                    <div class="fw-bold text-warning">{{ $stats['draft_posts'] }}</div>
+                                    <small class="text-muted">Drafts</small>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -223,33 +190,34 @@
             </div>
 
             <!-- Quick Actions -->
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom-0">
-                    <h6 class="card-title mb-0">
-                        <i class="bi bi-lightning me-2 text-primary"></i>Quick Actions
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">
-                            <i class="bi bi-plus-circle me-2"></i>Create New Post
-                        </a>
-                        <a href="{{ route('admin.posts.index', ['status' => 'draft']) }}" class="btn btn-outline-warning">
-                            <i class="bi bi-clock me-2"></i>Review Drafts ({{ $stats['draft_posts'] }})
-                        </a>
-                        <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-list-ul me-2"></i>Manage All Posts
-                        </a>
-                        <hr class="my-2">
-                        <a href="{{ url('/') }}" target="_blank" class="btn btn-outline-primary">
-                            <i class="bi bi-globe me-2"></i>View Website
-                            <i class="bi bi-box-arrow-up-right ms-auto small"></i>
-                        </a>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-bottom-0">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-lightning me-2 text-primary"></i>Quick Actions
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('admin.posts.create') }}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Create New Post
+                            </a>
+                            <a href="{{ route('admin.posts.index', ['status' => 'draft']) }}" class="btn btn-outline-warning">
+                                <i class="bi bi-clock me-2"></i>Review Drafts ({{ $stats['draft_posts'] }})
+                            </a>
+                            <a href="{{ route('admin.posts.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-list-ul me-2"></i>Manage All Posts
+                            </a>
+                            <hr class="my-2">
+                            <a href="{{ url('/') }}" target="_blank" class="btn btn-outline-primary">
+                                <i class="bi bi-globe me-2"></i>View Website
+                                <i class="bi bi-box-arrow-up-right ms-auto small"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
     <!-- Popular Posts (if you have analytics) -->
     @if($popular_posts->count() > 0)

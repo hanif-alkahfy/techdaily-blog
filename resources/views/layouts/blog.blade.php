@@ -55,12 +55,12 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                {{-- <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('blog.index') ? 'active' : '' }}"
                            href="{{ route('blog.index') }}">Blog</a>
                     </li>
-                </ul>
+                </ul> --}}
                 {{-- <div class="d-flex">
                     @auth
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Dashboard</a>

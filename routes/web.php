@@ -7,6 +7,8 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\Api\ApiPostController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\UserController;
 
 
 
@@ -49,6 +51,9 @@ Route::prefix('admin')->name('admin.')->middleware(['web', 'auth', 'verified', '
     Route::resource('posts', PostController::class);
     Route::post('/posts/bulk', [PostController::class, 'bulk'])->name('posts.bulk');
     Route::post('/posts/{post}/duplicate', [PostController::class, 'duplicate'])->name('posts.duplicate');
+
+    Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
 });
 
 

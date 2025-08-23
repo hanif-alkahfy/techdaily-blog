@@ -143,7 +143,6 @@
         .header-content {
             display: flex;
             align-items: center;
-            justify-content: between;
             height: 100%;
             padding: 0 1.5rem;
         }
@@ -157,12 +156,15 @@
             padding: 0.5rem;
             border-radius: 0.25rem;
             transition: all 0.2s ease;
+            margin-right: 1rem;
         }
 
         .sidebar-toggle:hover {
             background-color: #f8f9fa;
             color: #495057;
         }
+
+
 
         /* Main Content */
         .main-wrapper {
@@ -344,7 +346,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}"
-                       href="#"
+                       href="{{ route('admin.categories.index') }}"
                        data-tooltip="Categories">
                         <i class="bi bi-folder"></i>
                         <span>Categories</span>
@@ -353,7 +355,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}"
-                       href="#"
+                       href="{{ route('admin.users.index') }}"
                        data-tooltip="Users">
                         <i class="bi bi-people"></i>
                         <span>Users</span>
@@ -390,58 +392,58 @@
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <div class="d-flex align-items-center">
-                    <button class="sidebar-toggle me-3" id="sidebarToggle">
-                        <i class="bi bi-list"></i>
-                    </button>
-                    <div>
-                        <h6 class="mb-0 fw-semibold">@yield('title', 'Dashboard')</h6>
-                        <small class="text-muted">@yield('subtitle', 'Welcome back!')</small>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center">
-                    <!-- Notifications -->
-                    <div class="dropdown me-3">
-                        <button class="btn btn-link text-decoration-none p-2" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-bell"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                                3
-                            </span>
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <!-- Left Section - Title and Subtitle -->
+                    <div class="d-flex align-items-center">
+                        <button class="sidebar-toggle me-3" id="sidebarToggle">
+                            <i class="bi bi-list"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header">Notifications</h6></li>
-                            <li><a class="dropdown-item" href="#">New comment on your post</a></li>
-                            <li><a class="dropdown-item" href="#">User registered</a></li>
-                            <li><a class="dropdown-item" href="#">System update available</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-center" href="#">View all notifications</a></li>
-                        </ul>
+                        <div>
+                            <h6 class="mb-0 fw-semibold">@yield('title', 'Dashboard')</h6>
+                            <small class="text-muted">@yield('subtitle', 'Welcome back!')</small>
+                        </div>
                     </div>
 
-                    <!-- User Dropdown -->
-                    <div class="dropdown user-dropdown">
-                        <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="user-avatar">
-                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                            </div>
-                            <span class="d-none d-sm-inline">{{ auth()->user()->name }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header">{{ auth()->user()->email }}</h6></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item text-danger">
-                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
+                    <!-- Right Section - User Profile -->
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown me-3">
+                            <button class="btn btn-link text-decoration-none p-2" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                                    3
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">Notifications</h6></li>
+                                <li><a class="dropdown-item" href="#">New comment on your post</a></li>
+                                <li><a class="dropdown-item" href="#">User registered</a></li>
+                                <li><a class="dropdown-item" href="#">System update available</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-center" href="#">View all notifications</a></li>
+                            </ul>
+                        </div>                        <div class="dropdown user-dropdown">
+                            <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="user-avatar">
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                </div>
+                                <span class="d-none d-sm-inline">{{ auth()->user()->name }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">{{ auth()->user()->email }}</h6></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
