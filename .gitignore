@@ -19,6 +19,9 @@
 /storage/*.key
 /storage/pail
 /vendor
+!storage/app/public/posts/
+!storage/app/public/posts/featured/
+!storage/app/public/posts/featured/.gitkeep
 Homestead.json
 Homestead.yaml
 Thumbs.db
