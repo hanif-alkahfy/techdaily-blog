@@ -91,68 +91,89 @@ class PostSeeder extends Seeder
      */
     private function getFeaturedImage(array $postData): string
     {
-        // Map specific titles to featured images
+        $storagePath = storage_path('app/public/posts/featured');
+
+        // Create directories if they don't exist
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0755, true);
+        }
+
+        // Supported image extensions
+        $extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+
+        // Define image mappings based on category and content keywords
         $imageMap = [
-            'Building a REST API with Laravel 10: Complete Guide' => 'posts/featured/laravel-api.png',
-            'Docker for PHP Development: Complete Setup Guide' => 'posts/featured/docker-setup.png',
-            'Why I Still Choose Vue.js Over React in 2024' => 'posts/featured/vue-vs-react.jpeg',
-            'The Death of jQuery: Why It\'s Finally Time to Move On' => 'posts/featured/jquery-end.png',
-            'Tailwind CSS vs Bootstrap 5: A Comprehensive Comparison' => 'posts/featured/tailwind-bootstrap.png',
-            'Reviewing the Top 5 PHP IDEs in 2024' => 'posts/featured/php-ides.png',
-            'PHP 8.3 Released: New Features and Improvements' => 'posts/featured/php-ides.png',
-            'GitHub Copilot Chat Now Available in IDE' => 'posts/featured/copilot-chat.png',
-            '10 Laravel Performance Tips Every Developer Should Know' => 'posts/featured/laravel-api.png',
-            '5 Git Commands Every Developer Should Master' => 'posts/featured/git-commands.png'
+            'laravel' => ['laravel-*', 'php-*'],
+            'php' => ['php-*', 'programming-*'],
+            'docker' => ['docker-*', 'devops-*'],
+            'vue' => ['vue-*', 'frontend-*'],
+            'react' => ['react-*', 'frontend-*'],
+            'javascript' => ['javascript-*', 'frontend-*'],
+            'tailwind' => ['tailwind-*', 'css-*'],
+            'bootstrap' => ['bootstrap-*', 'css-*'],
+            'git' => ['git-*', 'version-control-*'],
+            'api' => ['api-*', 'backend-*'],
+            'database' => ['database-*', 'backend-*']
         ];
 
-        $title = $postData['title'];
-        $storagePath = storage_path('app/public');
+        // Get category and content for matching
+        $category = strtolower($postData['category']);
+        $content = strtolower($postData['content']);
+        $title = strtolower($postData['title']);
 
-        // Jika ada mapping spesifik untuk judul ini, gunakan gambar yang sesuai
-        if (isset($imageMap[$title])) {
-            // Pastikan direktori ada
-            $dir = dirname($storagePath . '/' . $imageMap[$title]);
-            if (!file_exists($dir)) {
-                mkdir($dir, 0755, true);
+        // Build array of possible image patterns
+        $patterns = [];
+
+        // Add category-specific patterns
+        $patterns[] = $category . '-*.jpg';
+
+        // Check content for keywords and add relevant patterns
+        foreach ($imageMap as $keyword => $possiblePatterns) {
+            if (str_contains($content, $keyword) || str_contains($title, $keyword)) {
+                $patterns = array_merge($patterns, $possiblePatterns);
             }
-
-            // Jika file gambar belum ada, buat placeholder
-            $imagePath = $storagePath . '/' . $imageMap[$title];
-            if (!file_exists($imagePath)) {
-                // Salin placeholder jika ada
-                $placeholder = public_path('images/post-placeholder.jpg');
-                if (file_exists($placeholder)) {
-                    copy($placeholder, $imagePath);
-                } else {
-                    // Jika tidak ada placeholder, buat file kosong
-                    file_put_contents($imagePath, 'Placeholder Image');
-                }
-            }
-
-            return $imageMap[$title];
         }
 
-        // Fallback ke default featured image jika tidak ada mapping
-        $defaultPath = 'posts/featured/default.png';
-        $defaultFullPath = $storagePath . '/' . $defaultPath;
-
-        // Buat direktori jika belum ada
-        $dir = dirname($defaultFullPath);
-        if (!file_exists($dir)) {
-            mkdir($dir, 0755, true);
+        // Find matching images
+        $matchingImages = [];
+        foreach ($patterns as $pattern) {
+            $found = glob($storagePath . '/' . $pattern);
+            if (!empty($found)) {
+                $matchingImages = array_merge($matchingImages, $found);
+            }
         }
 
-        // Buat default image jika belum ada
-        if (!file_exists($defaultFullPath)) {
+        // If no specific matches found, try category fallback
+        if (empty($matchingImages)) {
+            $fallbackPattern = $storagePath . '/' . $category . '-*.jpg';
+            $matchingImages = glob($fallbackPattern);
+        }
+
+        // If still no matches, use any available image
+        if (empty($matchingImages)) {
+            $matchingImages = glob($storagePath . '/*.*');
+        }
+
+        // If no images at all, create and use default
+        if (empty($matchingImages)) {
             $placeholder = public_path('images/post-placeholder.jpg');
-            if (file_exists($placeholder)) {
-                copy($placeholder, $defaultFullPath);
-            } else {
-                file_put_contents($defaultFullPath, 'Placeholder Image');
+            if (!file_exists($placeholder)) {
+                file_put_contents($placeholder, 'Placeholder Image');
             }
+
+            $destPath = $storagePath . '/default.jpg';
+            copy($placeholder, $destPath);
+            $matchingImages = [$destPath];
         }
 
-        return $defaultPath;
+        // Get most relevant image (first match) or random from matches
+        $selectedImage = $matchingImages[0];
+        if (count($matchingImages) > 1) {
+            $selectedImage = $matchingImages[array_rand($matchingImages)];
+        }
+
+        // Make path relative to storage
+        return str_replace(storage_path('app/public/'), '', $selectedImage);
     }    private function createRealPosts($admin): void
     {
         $baseDate = now()->subMonths(2);

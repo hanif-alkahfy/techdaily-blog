@@ -44,9 +44,36 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-        // Create real blog posts using PostSeeder
-        $this->command->info('Creating real blog posts...');
-        $this->call(PostSeeder::class);
+        // Create posts with existing users and categories
+        $this->command->info('Creating blog posts...');
+
+        // Create some posts by admin
+        Post::factory(10)
+            ->state([
+                'user_id' => $admin->id,
+                'category_id' => $categories->random()->id
+            ])
+            ->create();
+
+        // Create posts by other users
+        foreach ($users as $user) {
+            Post::factory(rand(3, 8))
+                ->state([
+                    'user_id' => $user->id,
+                    'category_id' => $categories->random()->id
+                ])
+                ->create();
+        }
+
+        // Create some draft posts
+        $this->command->info('📄 Creating draft posts...');
+        Post::factory(15)
+            ->draft()
+            ->state([
+                'user_id' => $allUsers->random()->id,
+                'category_id' => $categories->random()->id
+            ])
+            ->create();
 
         // Display summary
         $this->command->info('');

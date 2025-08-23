@@ -24,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Create storage link if it doesn't exist
+        if (!file_exists(public_path('storage'))) {
+            \Illuminate\Support\Facades\Artisan::call('storage:link');
+        }
+
         // Share data with admin layout
         View::composer('layouts.admin', function ($view) {
             $view->with([

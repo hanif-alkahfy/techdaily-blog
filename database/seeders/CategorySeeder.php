@@ -16,44 +16,29 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Web Development',
-                'slug' => 'web-development',
-                'description' => 'Articles about web development technologies and best practices',
+                'name' => 'Tutorial',
+                'slug' => 'tutorial',
+                'description' => 'Step-by-step guides and tutorials on various programming topics and technologies',
             ],
             [
-                'name' => 'Mobile Development',
-                'slug' => 'mobile-development',
-                'description' => 'Topics covering mobile app development for iOS and Android',
+                'name' => 'Opinion',
+                'slug' => 'opinion',
+                'description' => 'Personal views and insights on technology trends and practices',
             ],
             [
-                'name' => 'DevOps',
-                'slug' => 'devops',
-                'description' => 'Content about DevOps practices, tools, and methodologies',
+                'name' => 'Review',
+                'slug' => 'review',
+                'description' => 'In-depth reviews of tools, technologies, and frameworks',
             ],
             [
-                'name' => 'Artificial Intelligence',
-                'slug' => 'artificial-intelligence',
-                'description' => 'Exploring AI, Machine Learning, and Data Science',
+                'name' => 'News',
+                'slug' => 'news',
+                'description' => 'Latest updates and announcements in the tech world',
             ],
             [
-                'name' => 'Cybersecurity',
-                'slug' => 'cybersecurity',
-                'description' => 'Articles about security best practices and latest threats',
-            ],
-            [
-                'name' => 'Cloud Computing',
-                'slug' => 'cloud-computing',
-                'description' => 'Topics about cloud platforms, services, and architecture',
-            ],
-            [
-                'name' => 'Programming Languages',
-                'slug' => 'programming-languages',
-                'description' => 'Tutorials and insights about various programming languages',
-            ],
-            [
-                'name' => 'Software Architecture',
-                'slug' => 'software-architecture',
-                'description' => 'Design patterns, principles, and architectural concepts',
+                'name' => 'Tips',
+                'slug' => 'tips',
+                'description' => 'Quick tips and best practices for developers',
             ]
         ];
 

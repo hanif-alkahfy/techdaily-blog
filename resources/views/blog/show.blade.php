@@ -15,7 +15,7 @@
     <!-- Featured Image Header -->
     @if($post->featured_image)
         <div class="featured-image position-relative">
-            <img src="{{ asset('storage/' . $post->featured_image) }}"
+            <img src="{{ $post->featured_image_url }}"
                  alt="{{ $post->title }}"
                  class="w-100"
                  style="height: 400px; object-fit: cover;">
@@ -55,7 +55,7 @@
 
                     <div class="me-4 mb-2">
                         <i class="bi bi-calendar3 me-1"></i>
-                        <span>{{ $post->published_at->format('M d, Y') }}</span>
+                        <span>{{ $post->published_at ? $post->published_at->format('M d, Y') : $post->created_at->format('M d, Y') }}</span>
                     </div>
 
                     <div class="me-4 mb-2">

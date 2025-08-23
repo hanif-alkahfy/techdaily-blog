@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use App\Helpers\ImageHelper;
 
 class Post extends Model
 {
@@ -98,6 +99,11 @@ class Post extends Model
     public function getExcerptAttribute($value)
     {
         return $value ?: Str::limit(strip_tags($this->content), 150);
+    }
+
+    public function getFeaturedImageUrlAttribute()
+    {
+        return ImageHelper::featuredImage($this->featured_image);
     }
 
     public function comments()
