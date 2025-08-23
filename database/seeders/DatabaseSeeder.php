@@ -85,7 +85,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('   📄 Draft Posts: ' . Post::draft()->count());
         $this->command->info('');
         $this->command->info('🔐 Admin Login:');
-        $this->command->info('   Email: admin@example.com');
+        $this->command->info('   Email: admin@techdaily.com');
         $this->command->info('   Password: password');
     }
 }

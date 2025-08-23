@@ -234,23 +234,16 @@
                         <label for="category" class="form-label required">
                             Category <span class="text-danger">*</span>
                         </label>
-                        <select class="form-select @error('category') is-invalid @enderror"
-                                id="category"
-                                name="category"
+                        <select class="form-select @error('category_id') is-invalid @enderror"
+                                id="category_id"
+                                name="category_id"
                                 required>
                             <option value="">Select a category...</option>
-                            <option value="tutorial" {{ old('category') === 'tutorial' ? 'selected' : '' }}>
-                                📚 Tutorial
-                            </option>
-                            <option value="review" {{ old('category') === 'review' ? 'selected' : '' }}>
-                                ⭐ Review
-                            </option>
-                            <option value="news" {{ old('category') === 'news' ? 'selected' : '' }}>
-                                📰 News
-                            </option>
-                            <option value="opinion" {{ old('category') === 'opinion' ? 'selected' : '' }}>
-                                💭 Opinion
-                            </option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('category')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -366,10 +359,10 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" name="action" value="draft" class="btn btn-outline-warning">
+                            <button type="submit" onclick="setStatus('draft')" class="btn btn-outline-warning">
                                 <i class="bi bi-file-earmark me-2"></i>Save as Draft
                             </button>
-                            <button type="submit" name="action" value="publish" class="btn btn-primary">
+                            <button type="submit" onclick="setStatus('published')" class="btn btn-primary">
                                 <i class="bi bi-send me-2"></i>Publish Post
                             </button>
                         </div>
@@ -384,9 +377,14 @@
 
 @push('scripts')
 <!-- TinyMCE CDN -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/36qjgmfh0gd0l2w8xgvg9jruta92o4ey2kdf0pvv5wvsnp7a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
+// Handle status setting
+function setStatus(status) {
+    document.getElementById(`status_${status}`).checked = true;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize TinyMCE
     tinymce.init({

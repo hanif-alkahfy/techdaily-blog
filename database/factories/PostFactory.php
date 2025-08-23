@@ -23,15 +23,24 @@ class PostFactory extends Factory
     {
         $title = fake()->sentence(rand(4, 8));
 
+        $isPublished = fake()->randomElement(['draft', 'published']) === 'published';
+        $publishedDate = $isPublished ? fake()->dateTimeBetween('-6 months', 'now') : null;
+
         return [
             'title' => rtrim($title, '.'),
             'slug' => Str::slug($title),
             'excerpt' => fake()->paragraph(2),
             'content' => $this->generateContent(),
             'category_id' => \App\Models\Category::factory(),
-            'status' => fake()->randomElement(['draft', 'published']),
+            'status' => $isPublished ? 'published' : 'draft',
             'user_id' => User::factory(),
-            'created_at' => fake()->dateTimeBetween('-6 months', 'now'),
+            'published_at' => $publishedDate,
+            'meta_title' => rtrim(fake()->sentence(), '.'),
+            'meta_description' => fake()->paragraph(),
+            'meta_keywords' => implode(',', fake()->words(5)),
+            'is_featured' => fake()->boolean(20),
+            'views' => fake()->numberBetween(0, 1000),
+            'created_at' => $publishedDate ?? fake()->dateTimeBetween('-6 months', 'now'),
             'updated_at' => fake()->dateTimeBetween('-6 months', 'now'),
         ];
     }

@@ -328,23 +328,16 @@
                         <label for="category" class="form-label required">
                             Category <span class="text-danger">*</span>
                         </label>
-                        <select class="form-select @error('category') is-invalid @enderror"
-                                id="category"
-                                name="category"
+                        <select class="form-select @error('category_id') is-invalid @enderror"
+                                id="category_id"
+                                name="category_id"
                                 required>
                             <option value="">Select a category...</option>
-                            <option value="tutorial" {{ old('category', $post->category) === 'tutorial' ? 'selected' : '' }}>
-                                📚 Tutorial
-                            </option>
-                            <option value="review" {{ old('category', $post->category) === 'review' ? 'selected' : '' }}>
-                                ⭐ Review
-                            </option>
-                            <option value="news" {{ old('category', $post->category) === 'news' ? 'selected' : '' }}>
-                                📰 News
-                            </option>
-                            <option value="opinion" {{ old('category', $post->category) === 'opinion' ? 'selected' : '' }}>
-                                💭 Opinion
-                            </option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('category')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -502,7 +495,7 @@
 
 @push('scripts')
 <!-- TinyMCE CDN -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/36qjgmfh0gd0l2w8xgvg9jruta92o4ey2kdf0pvv5wvsnp7a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

@@ -1,9 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\PostController;
-use App\Http\Controllers\Api\PostController as ApiPostController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NewsletterController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -11,35 +15,36 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
-
-// Redirect /dashboard to /admin/dashboard
-Route::get('/dashboard', function () {
-    return redirect()->route('admin.dashboard');
-})->middleware(['auth', 'verified']);
-
-// Admin routes - protected by auth middleware
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Admin routes
-    Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-        Route::resource('posts', PostController::class);
-        // Bulk actions for posts
-        Route::post('/posts/bulk', [PostController::class, 'bulk'])->name('posts.bulk');
-    });
+Route::get('/', function () {
+    return redirect('/blog');
 });
 
-// API routes
-Route::prefix('api')->group(function () {
-    Route::prefix('posts')->group(function () {
-        Route::get('/', [ApiPostController::class, 'index']);
-        Route::get('/categories', [ApiPostController::class, 'categories']);
-        Route::get('/{slug}', [ApiPostController::class, 'show']);
-    });
+Route::middleware(['auth'])->group(function () {
+    Route::post('/blog/{post}/comments', [CommentController::class, 'store'])->name('blog.comments.store');
+    Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
+
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+Route::prefix('blog')->name('blog.')->group(function () {
+    Route::get('/', [BlogController::class, 'index'])->name('index');
+    Route::get('/{slug}', [BlogController::class, 'show'])->name('show');
+});
+
+// Group untuk Admin
+Route::prefix('admin')->name('admin.')->middleware(['web', 'auth', 'verified', 'admin'])->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+    });
+
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+    Route::resource('posts', PostController::class);
+    Route::post('/posts/bulk', [PostController::class, 'bulk'])->name('posts.bulk');
+    Route::post('/posts/{post}/duplicate', [PostController::class, 'duplicate'])->name('posts.duplicate');
+});
+
 
 require __DIR__.'/auth.php';

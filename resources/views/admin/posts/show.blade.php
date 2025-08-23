@@ -57,7 +57,7 @@
                         @endif
 
                         <span class="badge bg-secondary fs-6 ms-2">
-                            <i class="bi bi-tag me-1"></i>{{ ucfirst($post->category) }}
+                            <i class="bi bi-tag me-1"></i>{{ ucfirst($post->category->name) }}
                         </span>
                     </div>
 
@@ -255,7 +255,7 @@
                     </dd>
 
                     <dt class="col-sm-5">Category:</dt>
-                    <dd class="col-sm-7">{{ ucfirst($post->category) }}</dd>
+                    <dd class="col-sm-7">{{ ucfirst($post->category->name) }}</dd>
 
                     <dt class="col-sm-5">Status:</dt>
                     <dd class="col-sm-7">
@@ -375,7 +375,7 @@
 
                     <a href="{{ route('admin.posts.index', ['category' => $post->category]) }}"
                        class="btn btn-outline-info btn-sm">
-                        <i class="bi bi-list me-2"></i>View {{ ucfirst($post->category) }} Posts
+                        <i class="bi bi-list me-2"></i>View {{ ucfirst($post->category->name) }} Posts
                     </a>
                 </div>
             </div>

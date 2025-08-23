@@ -55,6 +55,32 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                        Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the post:</p>
+                    <p class="fw-bold" id="deletePostTitle"></p>
+                    <p class="mb-0 text-danger">This action cannot be undone!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                        <i class="bi bi-trash me-2"></i>Delete Post
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Posts Table -->
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
@@ -150,14 +176,15 @@
                                            title="Edit Post">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" class="d-inline">
+                                        <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" class="d-inline delete-post-form">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"
-                                                    class="btn btn-outline-danger"
-                                                    data-confirm-delete="Are you sure you want to delete '{{ $post->title }}'? This action cannot be undone."
-                                                    data-bs-toggle="tooltip"
-                                                    title="Delete Post">
+                                            <button type="button"
+                                                    class="btn btn-outline-danger delete-post-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteConfirmationModal"
+                                                    data-post-id="{{ $post->id }}"
+                                                    data-post-title="{{ $post->title }}">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
@@ -272,6 +299,20 @@
 
 @push('scripts')
 <script>
+    // Delete confirmation
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.delete-post-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const postTitle = this.getAttribute('data-post-title');
+                const form = this.closest('form');
+
+                if (confirm(`Are you sure you want to delete "${postTitle}"?\nThis action cannot be undone.`)) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
     // Change per page
     function changePerPage(perPage) {
         const url = new URL(window.location);

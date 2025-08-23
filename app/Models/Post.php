@@ -18,12 +18,22 @@ class Post extends Model
         'content',
         'category_id',
         'status',
-        'user_id'
+        'user_id',
+        'published_at',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'featured_image',
+        'is_featured',
+        'views'
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'published_at' => 'datetime',
+        'is_featured' => 'boolean',
+        'views' => 'integer',
     ];
 
     // Relationship with User
@@ -88,5 +98,10 @@ class Post extends Model
     public function getExcerptAttribute($value)
     {
         return $value ?: Str::limit(strip_tags($this->content), 150);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
