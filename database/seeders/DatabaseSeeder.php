@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@techdaily.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
+            'is_admin' => true,
         ]);
 
         // Create some additional users

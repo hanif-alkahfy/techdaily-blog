@@ -1,61 +1,272 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# TechDaily Blog
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern blogging platform built with Laravel, featuring a robust admin dashboard and RESTful API endpoints. Perfect for tech-focused content management with a clean, responsive interface.
 
-## About Laravel
+## 🌟 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Blog Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   📱 Responsive blog layout
+-   🔍 Article search functionality
+-   🏷️ Category-based organization
+-   📊 Popular posts tracking
+-   🏷️ Tag cloud functionality
+-   📖 Table of contents generation
+-   ⏱️ Reading time estimation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Admin Dashboard
 
-## Learning Laravel
+-   🔐 Secure authentication system
+-   📝 WYSIWYG editor (TinyMCE) integration
+-   📊 Post analytics (views tracking)
+-   🖼️ Image upload functionality
+-   📋 Draft & published states
+-   🎯 Featured posts system
+-   🔍 SEO meta management
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### API Endpoints
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+-   `GET /api/posts` - List published posts with pagination
+-   `GET /api/posts/{slug}` - Get post details
+-   `GET /api/posts/categories` - Get categories with post counts
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Tech Stack
 
-## Laravel Sponsors
+-   **Framework:** Laravel 10.x
+-   **Database:** MySQL
+-   **Frontend:** Bootstrap 5, TailwindCSS
+-   **Editor:** TinyMCE
+-   **Icons:** Bootstrap Icons
+-   **Authentication:** Laravel Breeze
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 📋 Requirements
 
-### Premium Partners
+-   PHP >= 8.1
+-   Composer
+-   MySQL >= 5.7
+-   Node.js & NPM
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🛠️ Installation
 
-## Contributing
+1. Clone the repository
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    ```bash
+    git clone https://github.com/hanif-alkahfy/techdaily-blog.git
+    cd techdaily-blog
+    ```
 
-## Code of Conduct
+2. Install PHP dependencies
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```bash
+    composer install
+    ```
 
-## Security Vulnerabilities
+3. Install NPM packages
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```bash
+    npm install
+    ```
 
-## License
+4. Create and configure .env file
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+
+5. Configure database in .env
+
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=techdaily
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
+
+6. Run database migrations and seeders
+
+    ```bash
+    php artisan migrate --seed
+    ```
+
+7. Link storage directory
+
+    ```bash
+    php artisan storage:link
+    ```
+
+8. Build assets
+
+    ```bash
+    npm run build
+    ```
+
+9. Start the development server
+    ```bash
+    php artisan serve
+    ```
+
+## 🗄️ Database Structure
+
+### Users Table
+
+-   id (primary key)
+-   name
+-   email
+-   email_verified_at
+-   password
+-   remember_token
+-   created_at
+-   updated_at
+
+### Categories Table
+
+-   id (primary key)
+-   name
+-   slug
+-   description
+-   created_at
+-   updated_at
+
+### Posts Table
+
+-   id (primary key)
+-   user_id (foreign key)
+-   category_id (foreign key)
+-   title
+-   slug
+-   excerpt
+-   content
+-   featured_image
+-   status (draft/published)
+-   is_featured
+-   views
+-   meta_title
+-   meta_description
+-   meta_keywords
+-   published_at
+-   created_at
+-   updated_at
+
+## 🔑 API Documentation
+
+### List Posts
+
+```http
+GET /api/posts
+```
+
+Query Parameters:
+
+-   `category` (string, optional) - Filter by category slug
+-   `search` (string, optional) - Search in title and content
+-   `page` (integer, optional) - Page number for pagination
+
+Response:
+
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "title": "Sample Post",
+            "slug": "sample-post",
+            "excerpt": "Post excerpt...",
+            "content": "Full post content...",
+            "featured_image": "url/to/image.jpg",
+            "status": "published",
+            "published_at": "2025-08-23T10:00:00Z",
+            "created_at": "2025-08-23T10:00:00Z",
+            "updated_at": "2025-08-23T10:00:00Z",
+            "category": {
+                "id": 1,
+                "name": "Tutorial",
+                "slug": "tutorial"
+            },
+            "author": {
+                "id": 1,
+                "name": "John Doe"
+            },
+            "meta": {
+                "title": "SEO Title",
+                "description": "Meta description",
+                "keywords": "keywords"
+            }
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "last_page": 5,
+        "per_page": 10,
+        "total": 50
+    }
+}
+```
+
+### Get Single Post
+
+```http
+GET /api/posts/{slug}
+```
+
+Response:
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "Sample Post"
+        // ... same structure as above
+    }
+}
+```
+
+### Get Categories
+
+```http
+GET /api/posts/categories
+```
+
+Response:
+
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "name": "Tutorial",
+            "slug": "tutorial",
+            "post_count": 15
+        }
+    ]
+}
+```
+
+## 🔒 Security
+
+-   Authentication using Laravel's built-in mechanisms
+-   CSRF protection for all forms
+-   XSS protection
+-   SQL injection prevention
+-   File upload validation and sanitization
+
+## 📝 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## 👨‍💻 Author
+
+**Hanif Al-Kahfi**
+
+-   GitHub: [@hanif-alkahfy](https://github.com/hanif-alkahfy)
+
+## 🙏 Acknowledgments
+
+-   [Laravel](https://laravel.com)
+-   [Bootstrap](https://getbootstrap.com)
+-   [TinyMCE](https://www.tiny.cloud)
