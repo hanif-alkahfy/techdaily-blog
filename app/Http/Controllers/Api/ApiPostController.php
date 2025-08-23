@@ -69,18 +69,27 @@ class ApiPostController extends Controller
     }
 
     /**
-     * Get available categories
+     * Get available categories with post counts
      */
     public function categories()
     {
         $categories = Post::published()
-            ->select('category')
-            ->groupBy('category')
-            ->pluck('category');
+            ->join('categories', 'posts.category_id', '=', 'categories.id')
+            ->select('categories.id', 'categories.name', 'categories.slug')
+            ->selectRaw('COUNT(posts.id) as post_count')
+            ->groupBy('categories.id', 'categories.name', 'categories.slug')
+            ->get();
 
         return response()->json([
             'success' => true,
-            'data' => $categories
+            'data' => $categories->map(function($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'slug' => $category->slug,
+                    'post_count' => $category->post_count
+                ];
+            })
         ]);
     }
 }
