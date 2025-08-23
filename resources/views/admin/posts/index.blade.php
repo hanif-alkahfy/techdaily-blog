@@ -299,17 +299,43 @@
 
 @push('scripts')
 <script>
-    // Delete confirmation
+    // Delete confirmation with modal
     document.addEventListener('DOMContentLoaded', function() {
+        let formToSubmit = null;
+
+        // Handle delete button clicks
         document.querySelectorAll('.delete-post-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const postTitle = this.getAttribute('data-post-title');
+                const postId = this.getAttribute('data-post-id');
                 const form = this.closest('form');
 
-                if (confirm(`Are you sure you want to delete "${postTitle}"?\nThis action cannot be undone.`)) {
-                    form.submit();
-                }
+                // Store the form reference for later submission
+                formToSubmit = form;
+
+                // Update modal content
+                document.getElementById('deletePostTitle').textContent = postTitle;
+
+                // Show the modal (Bootstrap will handle this via data-bs-target)
+                // No need to manually show modal since button has data-bs-target
             });
+        });
+
+        // Handle confirm delete button in modal
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            if (formToSubmit) {
+                // Hide modal first
+                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmationModal'));
+                modal.hide();
+
+                // Submit the form
+                formToSubmit.submit();
+            }
+        });
+
+        // Clear form reference when modal is hidden
+        document.getElementById('deleteConfirmationModal').addEventListener('hidden.bs.modal', function() {
+            formToSubmit = null;
         });
     });
 

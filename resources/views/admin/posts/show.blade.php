@@ -8,7 +8,7 @@
     </div>
     <div class="d-flex gap-2">
         @if($post->status === 'published')
-            <a href="/posts/{{ $post->slug }}" target="_blank" class="btn btn-success">
+            <a href="/blog/{{ $post->slug }}" target="_blank" class="btn btn-success">
                 <i class="bi bi-box-arrow-up-right me-2"></i>View Live
             </a>
         @endif
@@ -222,11 +222,13 @@
                 </button>
 
                 <form method="POST" action="{{ route('admin.posts.destroy', $post) }}"
-                      class="d-inline"
-                      onsubmit="return confirmDelete('Are you sure you want to delete this post? This action cannot be undone.')">
+                    class="d-inline" id="deletePostForm">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-outline-danger w-100">
+                    <button type="button"
+                            class="btn btn-outline-danger w-100"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteConfirmationModal">
                         <i class="bi bi-trash me-2"></i>Delete Post
                     </button>
                 </form>
@@ -383,10 +385,59 @@
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                    Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this post?</p>
+                <p class="fw-bold">{{ $post->title }}</p>
+                <p class="mb-0 text-danger">This action cannot be undone!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="bi bi-trash me-2"></i>Delete Post
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script>
+// Delete confirmation with modal
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteForm = document.getElementById('deletePostForm');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const deleteModal = document.getElementById('deleteConfirmationModal');
+
+    // Handle confirm delete button in modal
+    if (confirmDeleteBtn && deleteForm) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            // Hide modal first
+            const modal = bootstrap.Modal.getInstance(deleteModal);
+            if (modal) {
+                modal.hide();
+            }
+
+            // Submit the form after modal is hidden
+            setTimeout(() => {
+                deleteForm.submit();
+            }, 300);
+        });
+    }
+});
+
 // Copy to clipboard function
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(function() {

@@ -1,5 +1,35 @@
 @extends('layouts.admin')
 
+@push('styles')
+<style>
+    #statusPreview {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-lg {
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+    }
+
+    /* Enhanced status radio buttons */
+    .form-check-label strong {
+        font-size: 1rem;
+    }
+
+    .form-check-label small {
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Smooth transitions */
+    .badge {
+        transition: all 0.3s ease;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
@@ -358,12 +388,18 @@
                             </button>
                         </div>
 
-                        <div class="d-flex gap-2">
-                            <button type="submit" onclick="setStatus('draft')" class="btn btn-outline-warning">
-                                <i class="bi bi-file-earmark me-2"></i>Save as Draft
-                            </button>
-                            <button type="submit" onclick="setStatus('published')" class="btn btn-primary">
-                                <i class="bi bi-send me-2"></i>Publish Post
+                        <div class="d-flex align-items-center gap-3">
+                            <!-- Status Preview -->
+                            <div class="text-end">
+                                <small class="text-muted d-block">Will be saved as:</small>
+                                <span id="statusPreview" class="badge bg-warning">
+                                    <i class="bi bi-file-earmark me-1"></i>Draft
+                                </span>
+                            </div>
+
+                            <!-- Single Save Button -->
+                            <button type="submit" class="btn btn-primary btn-md">
+                                <i class="bi bi-floppy me-2"></i>Save Post
                             </button>
                         </div>
                     </div>
@@ -380,11 +416,6 @@
 <script src="https://cdn.tiny.cloud/1/36qjgmfh0gd0l2w8xgvg9jruta92o4ey2kdf0pvv5wvsnp7a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
-// Handle status setting
-function setStatus(status) {
-    document.getElementById(`status_${status}`).checked = true;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize TinyMCE
     tinymce.init({
@@ -408,6 +439,28 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    // Status preview update
+    function updateStatusPreview() {
+        const statusPreview = document.getElementById('statusPreview');
+        const draftRadio = document.getElementById('status_draft');
+        const publishedRadio = document.getElementById('status_published');
+
+        if (publishedRadio.checked) {
+            statusPreview.className = 'badge bg-success';
+            statusPreview.innerHTML = '<i class="bi bi-eye me-1"></i>Published';
+        } else {
+            statusPreview.className = 'badge bg-warning';
+            statusPreview.innerHTML = '<i class="bi bi-file-earmark me-1"></i>Draft';
+        }
+    }
+
+    // Listen to status changes
+    document.getElementById('status_draft').addEventListener('change', updateStatusPreview);
+    document.getElementById('status_published').addEventListener('change', updateStatusPreview);
+
+    // Initial status preview update
+    updateStatusPreview();
 
     // Character counters
     function updateCounter(inputId, counterId, maxLength) {
@@ -488,20 +541,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update TinyMCE content
         tinymce.triggerSave();
 
-        // Get the clicked button
-        const submitter = e.submitter;
-        const action = submitter?.value || 'draft';
-
-        // Update status based on action
-        if (action === 'publish') {
-            document.getElementById('status_published').checked = true;
-        } else if (action === 'draft') {
-            document.getElementById('status_draft').checked = true;
+        // Validate form
+        if (!validateForm()) {
+            e.preventDefault();
+            alert('Please fill in all required fields.');
+            return false;
         }
 
+        // Get the submit button
+        const submitButton = document.querySelector('button[type="submit"]:not([onclick])');
+
         // Show loading state
-        submitter.disabled = true;
-        submitter.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Processing...';
+        if (submitButton) {
+            submitButton.disabled = true;
+            const originalText = submitButton.innerHTML;
+
+            // Check current status for appropriate loading message
+            const isPublished = document.getElementById('status_published').checked;
+            const loadingText = isPublished
+                ? '<i class="bi bi-hourglass-split me-2"></i>Publishing...'
+                : '<i class="bi bi-hourglass-split me-2"></i>Saving...';
+
+            submitButton.innerHTML = loadingText;
+
+            // Restore button if form submission fails
+            setTimeout(() => {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
+            }, 5000);
+        }
     });
 
     // Auto-save draft (optional feature)
@@ -536,17 +604,32 @@ function removeImage() {
 // Form validation before submit
 function validateForm() {
     let isValid = true;
-    const requiredFields = ['title', 'content', 'category', 'status'];
+    const requiredFields = [
+        { name: 'title', element: document.getElementById('title') },
+        { name: 'content', element: document.getElementById('content') },
+        { name: 'category_id', element: document.getElementById('category_id') }
+    ];
 
-    requiredFields.forEach(fieldName => {
-        const field = document.querySelector(`[name="${fieldName}"]`);
-        if (!field.value.trim()) {
-            field.classList.add('is-invalid');
+    requiredFields.forEach(field => {
+        if (!field.element || !field.element.value.trim()) {
+            if (field.element) {
+                field.element.classList.add('is-invalid');
+            }
             isValid = false;
         } else {
-            field.classList.remove('is-invalid');
+            field.element.classList.remove('is-invalid');
         }
     });
+
+    // Check if at least one status is selected
+    const statusSelected = document.getElementById('status_draft').checked ||
+                          document.getElementById('status_published').checked;
+
+    if (!statusSelected) {
+        document.getElementById('status_draft').classList.add('is-invalid');
+        document.getElementById('status_published').classList.add('is-invalid');
+        isValid = false;
+    }
 
     return isValid;
 }

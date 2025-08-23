@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class PostSeeder extends Seeder
 {
@@ -164,60 +165,13 @@ class PostSeeder extends Seeder
                 'category' => 'Tutorial',
                 'status' => 'published',
                 'excerpt' => 'Learn how to build a complete REST API using Laravel 10 with authentication, validation, and proper error handling.',
-                'content' => 'Laravel 10 makes building REST APIs incredibly straightforward. In this comprehensive guide, we\'ll walk through creating a complete API from scratch.
+                'content' => 'Laravel has long been a favorite among PHP developers for building modern web applications, and with the release of Laravel 10, creating REST APIs has become even more efficient and developer-friendly. A REST API allows different applications to communicate by exposing endpoints for data exchange, and Laravel provides powerful tools such as routing, controllers, and Eloquent ORM to make this process straightforward.<br><br>
 
-## Setting Up the Project
+The first step in building a REST API with Laravel 10 is setting up routes and controllers. Laravel’s routing system makes it simple to define endpoints like /api/posts or /api/users, which map to specific controller methods. Controllers then handle logic such as fetching data from the database or returning JSON responses. With Laravel’s expressive syntax, developers can create clean and maintainable code that adheres to RESTful principles.<br><br>
 
-First, create a new Laravel project:
-```bash
-composer create-project laravel/laravel api-project
-cd api-project
-```
+Another key element is data handling with Eloquent ORM, which simplifies database interactions by allowing developers to work with models instead of raw SQL queries. This makes it easy to perform operations such as creating, updating, and retrieving data. To ensure security and consistency, Laravel also includes built-in features like validation, middleware for authentication, and resource classes for formatting API responses in a standardized way.<br><br>
 
-## Creating Models and Migrations
-
-We\'ll start by creating our models. For this example, we\'ll build a simple blog API:
-```bash
-php artisan make:model Post -m
-php artisan make:model Category -m
-```
-
-## API Routes and Controllers
-
-Laravel\'s API resource controllers make it easy to handle CRUD operations:
-```bash
-php artisan make:controller Api/PostController --api
-```
-
-Define your API routes in `routes/api.php`:
-```php
-Route::apiResource(\'posts\', PostController::class);
-```
-
-## Authentication with Sanctum
-
-Laravel Sanctum provides a simple authentication system for APIs:
-```bash
-composer require laravel/sanctum
-php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
-```
-
-## Validation and Error Handling
-
-Always validate incoming data and provide meaningful error messages:
-```php
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        \'title\' => \'required|string|max:255\',
-        \'content\' => \'required|string\',
-    ]);
-
-    return Post::create($validated);
-}
-```
-
-This foundation will give you a robust, secure API that follows Laravel best practices.',
+By leveraging these tools, developers can quickly build scalable and maintainable REST APIs with Laravel 10. Whether powering a mobile app, connecting with third-party services, or driving a single-page application, Laravel provides everything needed to create robust APIs. With its elegant syntax, strong ecosystem, and commitment to modern PHP practices, Laravel 10 continues to be one of the best frameworks for API development in 2024 and beyond.',
                 'source' => 'Inspired by Dev.to community posts',
             ],
             [
@@ -225,72 +179,13 @@ This foundation will give you a robust, secure API that follows Laravel best pra
                 'category' => 'Tutorial',
                 'status' => 'published',
                 'excerpt' => 'Set up a complete Docker development environment for PHP applications with MySQL, Redis, and proper volume mounting.',
-                'content' => 'Docker revolutionizes PHP development by providing consistent environments across different machines. Here\'s how to set up a complete development stack.
+                'content' => 'In modern web development, containerization has become a standard practice for building consistent and scalable environments. Docker plays a crucial role in this shift, allowing developers to run applications inside lightweight containers that work the same way across different systems. For PHP developers, Docker provides an easy way to set up and manage environments without worrying about local configuration issues or system dependencies.,<br><br>
 
-## Why Docker for PHP?
+The main advantage of using Docker for PHP development is consistency. With Docker, developers can define their entire stack—including PHP, web servers like Nginx or Apache, and databases such as MySQL—inside configuration files. This eliminates the “it works on my machine” problem and ensures that every team member works with the same setup. It also makes deployment to production environments smoother, as the containerized setup mirrors the local development environment.<br><br>
 
-Docker eliminates "it works on my machine" problems by containerizing your entire development environment. This ensures consistency across development, staging, and production environments.
+Setting up PHP with Docker typically involves creating a Dockerfile for defining the PHP environment and a docker-compose.yml file to orchestrate services like databases, caching systems, and web servers. Developers can also mount project files directly into containers, making it easy to test changes instantly. This modular and scalable approach is especially useful for projects using modern PHP frameworks such as Laravel or Symfony, which often require multiple services working together seamlessly.<br><br>
 
-## Basic Docker Compose Setup
-
-Create a `docker-compose.yml` file:
-```yaml
-version: \'3.8\'
-services:
-  app:
-    build: .
-    volumes:
-      - .:/var/www/html
-    ports:
-      - "8000:8000"
-
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: laravel
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
-
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-
-volumes:
-  mysql_data:
-```
-
-## Creating the Dockerfile
-
-Your `Dockerfile` should include all necessary PHP extensions:
-```dockerfile
-FROM php:8.2-fpm
-
-RUN apt-get update && apt-get install -y \
-    git \
-    zip \
-    unzip \
-    && docker-php-ext-install pdo_mysql
-
-COPY . /var/www/html
-WORKDIR /var/www/html
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-```
-
-## Running the Environment
-
-Start your development environment:
-```bash
-docker-compose up -d
-docker-compose exec app composer install
-docker-compose exec app php artisan migrate
-```
-
-This setup provides a complete, isolated development environment that your entire team can use consistently.',
+By adopting Docker, PHP developers can streamline their workflows, improve collaboration, and reduce time spent on configuration. The ability to spin up environments quickly, replicate setups across teams, and deploy applications with confidence makes Docker an essential tool in today’s PHP ecosystem. With a well-structured setup, Docker not only simplifies development but also paves the way for smoother testing, staging, and production pipelines.',
                 'source' => 'Based on Docker Hub documentation and community best practices',
             ],
 
@@ -300,35 +195,13 @@ This setup provides a complete, isolated development environment that your entir
                 'category' => 'Opinion',
                 'status' => 'published',
                 'excerpt' => 'After working with both frameworks extensively, here\'s why Vue.js continues to be my go-to choice for frontend development.',
-                'content' => 'The JavaScript framework debate continues to rage on, but after five years of working with both Vue.js and React, I still find myself reaching for Vue. Here\'s why.
+                'content' => 'In the ever-evolving world of front-end frameworks, React and Vue.js continue to dominate discussions among developers. React, backed by Meta, remains the most widely adopted, while Vue.js has steadily grown into a powerful and beloved framework. Despite React’s popularity and vast ecosystem, many developers—including myself—still prefer Vue.js in 2024 for its simplicity, flexibility, and developer experience.<br><br>
 
-## Learning Curve and Developer Experience
+One of the main reasons I choose Vue.js is its gentle learning curve. Vue provides a clean, intuitive syntax that feels natural even to beginners, while still offering advanced features for complex applications. Unlike React, which often requires additional setup and decisions around state management or routing, Vue offers a more integrated ecosystem. Tools like Vue Router and Pinia work seamlessly, reducing the time spent configuring and allowing developers to focus on building features.<br><br>
 
-Vue\'s learning curve is significantly gentler than React\'s. New developers can be productive with Vue in days, not weeks. The single-file component structure feels intuitive, and the template syntax is familiar to anyone who\'s worked with HTML.
+Another advantage of Vue.js is its balance between structure and flexibility. React emphasizes a "JavaScript-first" approach, which can feel unstructured at times, while Vue’s single-file components strike a balance by combining template, logic, and styles in one place. This structure makes collaboration easier for teams and improves maintainability in the long run. Moreover, Vue’s reactivity system, especially in Vue 3, feels more intuitive and efficient compared to React’s hooks, offering a smoother developer experience.<br><br>
 
-React, with its JSX and functional programming concepts, requires a more significant mental shift. While powerful, it can be overwhelming for newcomers.
-
-## Documentation and Community
-
-Vue\'s documentation is exceptional. It\'s comprehensive, well-organized, and includes practical examples. The Vue team clearly prioritizes developer experience in their documentation.
-
-React\'s documentation has improved significantly, but Vue still leads in this area.
-
-## Bundle Size and Performance
-
-Out of the box, Vue produces smaller bundle sizes. Vue 3\'s composition API provides React-like capabilities while maintaining Vue\'s template-driven approach.
-
-Vue\'s reactivity system is also more efficient for many use cases, automatically optimizing re-renders without requiring manual optimization like React\'s useMemo and useCallback.
-
-## Ecosystem Maturity
-
-While React has a larger ecosystem, Vue\'s ecosystem is more curated. Tools like Nuxt.js, Pinia, and Vue Router provide official or semi-official solutions that work seamlessly together.
-
-React\'s vast ecosystem can be overwhelming, with multiple competing solutions for the same problems.
-
-## The Bottom Line
-
-Both frameworks are excellent choices, but Vue\'s balance of power and simplicity continues to make it my preferred option for most projects. Your mileage may vary, but don\'t overlook Vue in the React-dominated discussion.',
+Ultimately, while React’s massive community and job market make it an attractive choice, Vue.js shines for developers who prioritize simplicity, productivity, and elegance. In 2024, I continue to choose Vue.js because it helps me build applications faster without compromising scalability. Both frameworks are excellent in their own right, but for many projects, Vue offers the perfect balance of power and developer happiness.',
                 'source' => 'Personal opinion piece inspired by Medium discussions',
             ],
             [
@@ -336,49 +209,13 @@ Both frameworks are excellent choices, but Vue\'s balance of power and simplicit
                 'category' => 'Opinion',
                 'status' => 'published',
                 'excerpt' => 'jQuery served us well for over a decade, but modern JavaScript and frameworks have made it obsolete. Here\'s why it\'s time to let go.',
-                'content' => 'jQuery revolutionized web development when it launched in 2006. It solved real problems: inconsistent browser APIs, verbose DOM manipulation, and lack of modern JavaScript features. But in 2024, it\'s time to admit that jQuery\'s time has passed.
+                'content' => 'For over a decade, jQuery was the go-to JavaScript library that revolutionized web development. It simplified DOM manipulation, event handling, and AJAX requests at a time when browser inconsistencies made JavaScript difficult to work with. Nearly every major website relied on it, and it became a standard inclusion in countless projects. However, as browsers evolved and modern JavaScript gained powerful new features, the once-essential jQuery has begun to lose its relevance.<br><br>
 
-## What jQuery Solved
+Modern JavaScript now offers many of the conveniences that jQuery once provided. Features like querySelector, fetch, template literals, and ES6+ syntax have eliminated the need for jQuery in most cases. Frameworks such as React, Vue, and Angular also provide structured solutions for building dynamic interfaces, reducing the role of jQuery to a legacy dependency rather than an active tool in modern development. This shift has led many developers to reconsider whether including jQuery is worth the performance cost.<br><br>
 
-jQuery addressed genuine pain points in web development:
-- Cross-browser compatibility issues
-- Verbose DOM manipulation
-- AJAX request handling
-- Animation and effects
-- Event handling inconsistencies
+Another factor in jQuery’s decline is performance and maintainability. Including the entire jQuery library just to simplify a few DOM operations adds unnecessary weight to modern web applications. In an era where performance optimization and bundle size are critical, relying on jQuery often creates more problems than it solves. Developers are now encouraged to adopt native JavaScript or lightweight utilities that offer the same functionality with a fraction of the overhead.<br><br>
 
-These were real problems in the IE6-IE8 era, and jQuery provided elegant solutions.
-
-## Why jQuery Is No Longer Needed
-
-Modern browsers have converged on web standards. The APIs that jQuery abstracted are now consistent across browsers:
-
-- `document.querySelectorAll()` replaced jQuery selectors
-- `fetch()` API replaced jQuery\'s AJAX methods
-- CSS3 animations replaced jQuery animations
-- Modern JavaScript (ES6+) provides cleaner syntax
-
-## The Performance Cost
-
-jQuery adds ~30KB to your bundle size. For many applications, you\'re shipping a library just to use `$(\'#element\')` instead of `document.getElementById(\'element\')`.
-
-Modern bundlers and tree-shaking can\'t eliminate unused jQuery code effectively because of its monolithic structure.
-
-## Learning Modern JavaScript
-
-Relying on jQuery prevents developers from learning modern JavaScript. Understanding the platform APIs makes you a better developer and enables you to work with any framework or library.
-
-## Migration Strategy
-
-Migrating from jQuery doesn\'t have to be painful:
-1. Replace jQuery selectors with native DOM methods
-2. Use fetch() for AJAX requests
-3. Replace jQuery animations with CSS transitions
-4. Use modern event handling
-
-## Conclusion
-
-jQuery was a necessary bridge between old and new web development. That bridge has served its purpose. Modern JavaScript is powerful, consistent, and well-supported. It\'s time to embrace the platform.',
+While jQuery deserves recognition for its role in shaping the modern web, it’s clear that its time has passed. The developer community has largely moved on to newer tools and frameworks that are faster, more efficient, and better suited for today’s development needs. For developers still relying on jQuery, now is the perfect time to embrace modern JavaScript and frameworks that will ensure future-ready, scalable applications.',
                 'source' => 'Inspired by discussions on Hacker News and dev communities',
             ],
 
@@ -388,64 +225,13 @@ jQuery was a necessary bridge between old and new web development. That bridge h
                 'category' => 'Review',
                 'status' => 'published',
                 'excerpt' => 'An in-depth comparison of the two most popular CSS frameworks, covering everything from design philosophy to performance.',
-                'content' => 'The CSS framework landscape has been dominated by Bootstrap for years, but Tailwind CSS has emerged as a serious contender. After using both extensively, here\'s my comprehensive comparison.
+                'content' => 'When it comes to front-end development, choosing the right CSS framework can save developers time and ensure consistency across projects. Two of the most widely used frameworks today are Tailwind CSS and Bootstrap 5. While both aim to accelerate the styling process, they take very different approaches. Bootstrap provides a ready-to-use component library with pre-designed elements, while Tailwind focuses on utility-first classes that give developers granular control over design.<br><br>
 
-## Design Philosophy
+Bootstrap 5 is a tried-and-true framework that offers a comprehensive set of responsive components like navbars, modals, grids, and forms. It’s beginner-friendly and ideal for developers who want to get projects up and running quickly without worrying too much about design details. With built-in JavaScript components and a strong ecosystem, Bootstrap remains a popular choice for rapid prototyping and enterprise applications.<br><br>
 
-**Bootstrap** follows a component-based approach. You get pre-built components like buttons, cards, and navbars that you can customize through SASS variables and custom CSS.
+On the other hand, Tailwind CSS gives developers more flexibility by providing low-level utility classes that can be combined to create custom designs without writing custom CSS. This approach results in highly customizable and unique user interfaces, making Tailwind a favorite among developers who want design freedom. Although it has a steeper learning curve, Tailwind reduces the need to override predefined styles, which can often be a pain point when using Bootstrap.<br><br>
 
-**Tailwind CSS** takes a utility-first approach. Instead of pre-built components, you compose designs using small, single-purpose utility classes.
-
-## Learning Curve
-
-**Bootstrap (★★★★☆)**: Easier for beginners. The component-based approach feels familiar, and you can build decent-looking sites quickly.
-
-**Tailwind CSS (★★★☆☆)**: Steeper initial learning curve. You need to learn utility class names, but once you do, development becomes very fast.
-
-## Customization
-
-**Bootstrap (★★★☆☆)**: Customization often requires overriding CSS, which can lead to specificity battles. SASS customization helps but has limitations.
-
-**Tailwind CSS (★★★★★)**: Extremely customizable through configuration files. You can customize everything from colors to spacing scales without writing custom CSS.
-
-## Bundle Size
-
-**Bootstrap (★★★☆☆)**: Larger bundle size (~25KB minified + gzipped) even with unused components. Purging unused CSS requires additional tooling.
-
-**Tailwind CSS (★★★★☆)**: Larger development build but excellent production optimization. With PurgeCSS, production builds are typically smaller than Bootstrap.
-
-## Development Speed
-
-**Bootstrap (★★★★☆)**: Very fast for prototyping and standard designs. Component-based approach accelerates development.
-
-**Tailwind CSS (★★★★★)**: Once familiar with utilities, development is extremely fast. No context switching between HTML and CSS files.
-
-## Design Uniqueness
-
-**Bootstrap (★★☆☆☆)**: Sites tend to look similar without significant customization. The "Bootstrap look" is recognizable.
-
-**Tailwind CSS (★★★★★)**: Encourages unique designs. Utility-first approach makes it easy to create custom looks.
-
-## Community and Ecosystem
-
-**Bootstrap (★★★★★)**: Massive ecosystem with themes, templates, and third-party components. Extensive documentation and community.
-
-**Tailwind CSS (★★★★☆)**: Growing rapidly. Headless UI, Tailwind UI, and many component libraries available. Excellent documentation.
-
-## Verdict
-
-Choose **Bootstrap** if:
-- You need to prototype quickly
-- Your team prefers component-based approaches
-- You\'re building standard business applications
-
-Choose **Tailwind CSS** if:
-- You want maximum design flexibility
-- You prefer utility-first approaches
-- Bundle size optimization is important
-- You want to avoid "framework look"
-
-Both are excellent choices, but Tailwind CSS represents the future of CSS frameworks.',
+In the end, the choice between Tailwind CSS and Bootstrap 5 depends on the project’s goals. For fast, standardized, and consistent designs, Bootstrap offers a straightforward solution. For developers seeking customization, scalability, and a modern workflow, Tailwind CSS is often the better fit. Both frameworks are powerful in their own right, and understanding their strengths will help developers choose the best tool for their specific needs.',
                 'source' => 'Based on extensive usage and community feedback from Reddit and dev forums',
             ],
             [
@@ -453,104 +239,15 @@ Both are excellent choices, but Tailwind CSS represents the future of CSS framew
                 'category' => 'Review',
                 'status' => 'published',
                 'excerpt' => 'A detailed review of the best IDEs and editors for PHP development, comparing features, performance, and value.',
-                'content' => 'Choosing the right IDE can significantly impact your PHP development productivity. After testing the top options extensively, here\'s my comprehensive review.
+                'content' => 'Choosing the right Integrated Development Environment (IDE) can have a huge impact on a developer’s productivity, efficiency, and overall coding experience. In 2024, PHP remains one of the most widely used languages for web development, powering frameworks like Laravel, Symfony, and CodeIgniter. With so many IDE options available, selecting the best one often comes down to balancing performance, features, and ease of use.<br><br>
 
-## 1. PhpStorm (★★★★★)
+One of the most popular choices is PhpStorm, known for its powerful debugging, smart code completion, and seamless integration with modern frameworks. For developers who prefer a lightweight yet versatile tool, Visual Studio Code continues to dominate with its rich ecosystem of extensions and community support. On the other hand, NetBeans remains a reliable option with built-in PHP support and strong project management capabilities, making it a solid choice for beginners and professionals alike.<br><br>
 
-**Price**: $199/year (first year), $159/year (second year), $119/year (third year onwards)
+Other notable IDEs include Eclipse PDT, which provides a flexible and open-source environment for PHP development, and Aptana Studio, tailored for full-stack developers who want PHP alongside JavaScript, HTML, and CSS support. Each IDE has its strengths—while PhpStorm excels at professional-grade features, VS Code offers unmatched flexibility, and NetBeans, Eclipse, and Aptana provide free and open-source alternatives.<br><br>
 
-**Pros**:
-- Exceptional PHP intellisense and code analysis
-- Built-in debugging with Xdebug integration
-- Excellent database tools
-- Git integration and version control
-- Framework support (Laravel, Symfony, WordPress)
-- Refactoring tools
-- Built-in terminal and SSH support
+Ultimately, the “best” IDE depends on a developer’s personal preferences and project requirements. For those who want premium features and don’t mind investing, PhpStorm leads the pack. For developers seeking a free, customizable, and lightweight environment, VS Code stands out. Meanwhile, open-source enthusiasts can rely on NetBeans, Eclipse, or Aptana for robust support. In 2024, PHP developers are spoiled for choice, with IDEs that cater to every workflow and coding style.
 
-**Cons**:
-- Expensive for individual developers
-- Can be resource-heavy
-- Learning curve for advanced features
-
-**Best for**: Professional PHP developers, large teams, complex applications
-
-## 2. Visual Studio Code (★★★★☆)
-
-**Price**: Free
-
-**Pros**:
-- Completely free and open-source
-- Lightweight and fast
-- Massive extension ecosystem
-- Great Git integration
-- Excellent debugging support with extensions
-- Cross-platform consistency
-- Regular updates
-
-**Cons**:
-- Requires extensions for full PHP functionality
-- Can become slow with too many extensions
-- Less intelligent code analysis than PhpStorm
-
-**Best for**: Developers on a budget, those who prefer customizable environments
-
-## 3. Sublime Text (★★★☆☆)
-
-**Price**: $99 one-time license
-
-**Pros**:
-- Extremely fast and lightweight
-- Powerful search and replace
-- Multiple cursors and selections
-- Package ecosystem
-- Distraction-free interface
-
-**Cons**:
-- Limited built-in PHP features
-- Requires packages for modern functionality
-- Less active development than competitors
-
-**Best for**: Developers who prioritize speed and simplicity
-
-## 4. Vim/Neovim (★★★☆☆)
-
-**Price**: Free
-
-**Pros**:
-- Ultimate customization
-- Extremely lightweight
-- Available on all platforms
-- Powerful once mastered
-- Never leaves keyboard
-
-**Cons**:
-- Steep learning curve
-- Requires significant configuration
-- Not beginner-friendly
-
-**Best for**: Power users, terminal-focused developers
-
-## 5. NetBeans (★★★☆☆)
-
-**Price**: Free
-
-**Pros**:
-- Free and open-source
-- Good PHP support out of the box
-- Integrated development environment
-- Project management features
-
-**Cons**:
-- Slower than alternatives
-- Less modern interface
-- Smaller community
-
-**Best for**: Developers wanting a free full IDE experience
-
-## Conclusion
-
-For professional PHP development, PhpStorm remains the gold standard despite its cost. VS Code offers the best balance of features and price for most developers. Choose based on your budget, team requirements, and complexity of projects.',
+Do you want me to also make a detailed blog version with each IDE broken down into pros, cons, and ideal use cases (plus screenshots/code snippets), so it’s more practical for readers comparing tools?',
                 'source' => 'Personal testing and community feedback from Stack Overflow surveys',
             ],
 
@@ -560,82 +257,13 @@ For professional PHP development, PhpStorm remains the gold standard despite its
                 'category' => 'News',
                 'status' => 'published',
                 'excerpt' => 'PHP 8.3 brings exciting new features including typed class constants, readonly amendments, and performance improvements.',
-                'content' => 'The PHP development team has released PHP 8.3, bringing several exciting new features and improvements that will enhance developer productivity and application performance.
+                'content' => 'The PHP development team has officially announced the release of PHP 8.3, introducing a range of new features, performance enhancements, and improvements that make the language even more powerful and developer-friendly. As the backbone of countless web applications and frameworks, including Laravel, Symfony, and WordPress, PHP continues to evolve to meet the needs of modern development. This release builds on the strong foundation of PHP 8.0, 8.1, and 8.2, further enhancing both speed and usability.<br><br>
 
-## Key New Features
+One of the most notable additions in PHP 8.3 is the introduction of typed class constants, which allow developers to enforce type declarations on class constants just as they can with properties and function parameters. This improves code reliability and reduces the chances of type-related bugs. Another highlight is the expansion of the readonly properties feature, now supporting dynamic and more flexible use cases that give developers greater control over immutability in their applications.<br><br>
 
-### Typed Class Constants
+Beyond new language features, PHP 8.3 brings important performance improvements under the hood. The Just-In-Time (JIT) compiler and engine optimizations have been refined, ensuring faster execution of PHP code across a variety of workloads. Additionally, enhancements to error handling and deprecation notices provide clearer guidance for developers, making it easier to maintain and upgrade codebases without unexpected issues.<br><br>
 
-PHP 8.3 introduces the ability to declare types for class constants:
-
-```php
-class Status {
-    public const string PENDING = \'pending\';
-    public const string COMPLETED = \'completed\';
-    public const int MAX_RETRIES = 3;
-}
-```
-
-This provides better type safety and clearer code documentation.
-
-### Readonly Amendments
-
-The readonly functionality has been expanded with new capabilities:
-
-```php
-readonly class User {
-    public function __construct(
-        public string $name,
-        public string $email,
-    ) {}
-}
-```
-
-### Dynamic Class Constant Fetch
-
-You can now fetch class constants dynamically:
-
-```php
-$constantName = \'STATUS_ACTIVE\';
-$value = MyClass::{$constantName};
-```
-
-### New json_validate() Function
-
-A dedicated function for JSON validation without parsing:
-
-```php
-if (json_validate($jsonString)) {
-    $data = json_decode($jsonString);
-}
-```
-
-## Performance Improvements
-
-PHP 8.3 includes several performance optimizations:
-- Improved opcache performance
-- Better memory usage in specific scenarios
-- Faster array operations
-
-## Deprecations and Changes
-
-Several features have been deprecated in preparation for PHP 9.0:
-- Passing negative string offsets to certain functions
-- Using ${} for variable parsing in strings
-- Various legacy functionalities
-
-## Migration Considerations
-
-Most PHP 8.2 applications should run on PHP 8.3 without issues. However, developers should:
-- Test applications thoroughly
-- Review deprecated feature usage
-- Update dependencies that may be affected
-
-## Community Response
-
-The PHP community has responded positively to these changes, particularly appreciating the continued focus on type safety and performance improvements.
-
-PHP 8.3 represents another solid step forward for the language, maintaining backward compatibility while introducing useful new features.',
+With these updates, PHP 8.3 reinforces its role as a modern, efficient, and robust programming language. Developers can look forward to cleaner syntax, better performance, and stronger tools for building scalable web applications. As adoption grows, the new features and improvements in PHP 8.3 will play a crucial role in shaping the next generation of PHP-powered projects.',
                 'source' => 'Official PHP release notes and community discussions',
             ],
             [
@@ -643,68 +271,13 @@ PHP 8.3 represents another solid step forward for the language, maintaining back
                 'category' => 'News',
                 'status' => 'published',
                 'excerpt' => 'GitHub announces the general availability of Copilot Chat, bringing conversational AI assistance directly to your development environment.',
-                'content' => 'GitHub has announced the general availability of GitHub Copilot Chat, extending the AI-powered coding assistant with conversational capabilities directly within supported IDEs.
+                'content' => 'GitHub has officially released Copilot Chat, now available directly within popular Integrated Development Environments (IDEs) such as Visual Studio Code and JetBrains. This feature allows developers to interact with GitHub Copilot through a fully integrated chat interface inside the IDE. With Copilot Chat, developers can go beyond code suggestions — they can ask questions, request explanations, and even debug issues faster without leaving their development environment.<br><br>
 
-## What\'s New
+One of the main advantages of Copilot Chat is its ability to understand project context in real time. The AI can provide answers based on the specific code being worked on, making its suggestions more accurate and relevant. For example, when a developer encounters an error, Copilot Chat can analyze the related snippet and propose concrete solutions rather than giving generic responses. This significantly speeds up the development process and reduces the time spent searching for fixes online.<br><br>
 
-GitHub Copilot Chat builds upon the existing Copilot code completion by adding:
+Additionally, GitHub Copilot Chat supports a variety of productivity commands, such as generating documentation automatically, creating unit tests, and explaining complex functions or algorithms. This feature encourages more efficient collaboration, especially for teams that want to maintain consistency in both code and documentation. With easier access through IDEs, developers can rely on Copilot as a “pair programmer” that is always ready to assist.<br><br>
 
-### Conversational Interface
-- Natural language queries about your code
-- Context-aware responses based on your current project
-- Ability to ask for explanations, refactoring suggestions, and debugging help
-
-### IDE Integration
-Currently supported in:
-- Visual Studio Code (with GitHub Copilot extension)
-- Visual Studio 2022
-- JetBrains IDEs (IntelliJ IDEA, PhpStorm, etc.)
-
-### Enhanced Capabilities
-- **Code Explanation**: Ask Copilot to explain complex code blocks
-- **Refactoring Suggestions**: Get recommendations for improving code structure
-- **Bug Detection**: Identify potential issues in your code
-- **Test Generation**: Generate unit tests for your functions
-- **Documentation**: Create documentation for your code
-
-## Example Use Cases
-
-Developers can now:
-- Ask "What does this function do?" while viewing unfamiliar code
-- Request "Refactor this method to be more readable"
-- Query "Write unit tests for this class"
-- Get help with "Fix the bug in this code"
-
-## Pricing and Availability
-
-GitHub Copilot Chat is included with existing GitHub Copilot subscriptions:
-- Individual: $10/month or $100/year
-- Business: $19/user/month
-
-## Developer Reception
-
-Early feedback from developers has been overwhelmingly positive:
-- Reduced time spent on documentation lookup
-- Faster debugging and troubleshooting
-- Better code understanding for team collaboration
-- Improved learning curve for new technologies
-
-## Privacy and Security
-
-GitHub maintains that:
-- Code snippets are not stored permanently
-- Conversations are not used to train models without consent
-- Enterprise customers have additional privacy controls
-
-## Looking Ahead
-
-GitHub plans to expand Copilot Chat with:
-- Support for more IDEs
-- Integration with pull request reviews
-- Team collaboration features
-- Custom model training for organizations
-
-This represents a significant step toward more interactive and intelligent development environments, potentially changing how developers interact with their tools and learn new technologies.',
+The arrival of GitHub Copilot Chat in IDEs marks a major step toward smarter and more efficient coding experiences. This integration not only extends Copilot’s functionality but also reinforces the role of AI as an essential partner in modern software development. As more developers adopt this feature, GitHub aims to boost productivity, code quality, and the overall learning experience in programming.',
                 'source' => 'GitHub official announcements and developer community feedback',
             ],
 
@@ -714,127 +287,13 @@ This represents a significant step toward more interactive and intelligent devel
                 'category' => 'Tips',
                 'status' => 'published',
                 'excerpt' => 'Essential performance optimization techniques to make your Laravel applications faster and more efficient.',
-                'content' => 'Laravel applications can be incredibly performant when optimized correctly. Here are 10 essential tips to boost your Laravel app\'s performance.
+                'content' => 'Laravel is one of the most popular PHP frameworks, known for its elegant syntax and developer-friendly ecosystem. However, as applications grow, performance optimization becomes a key factor to ensure fast and scalable systems. Understanding how to fine-tune Laravel can make a big difference in both user experience and resource management. That’s why every developer should be aware of the best practices to optimize Laravel applications effectively.<br><br>
 
-## 1. Use Eager Loading to Avoid N+1 Queries
+Some of the most effective performance tips include using caching wherever possible, such as query caching and route caching, which significantly reduce load times. Developers should also take advantage of config caching and optimized autoloading to speed up application bootstrapping. Minimizing database queries through eager loading and indexing also ensures that data retrieval remains efficient as the project scales. These small changes can lead to noticeable improvements in speed and responsiveness.<br><br>
 
-The N+1 query problem is one of the most common performance issues:
+In addition to caching and query optimization, developers should consider using queues for tasks like sending emails or processing jobs in the background. This prevents heavy operations from slowing down the user-facing side of the application. Tools like Redis or Horizon can be integrated to handle queues efficiently. Another useful practice is implementing content delivery networks (CDNs) for static assets, reducing server load and ensuring faster delivery of resources to users worldwide.<br><br>
 
-```php
-// Bad - N+1 queries
-$posts = Post::all();
-foreach ($posts as $post) {
-    echo $post->user->name; // Queries database for each post
-}
-
-// Good - Eager loading
-$posts = Post::with(\'user\')->get();
-foreach ($posts as $post) {
-    echo $post->user->name; // Uses loaded data
-}
-```
-
-## 2. Implement Query Result Caching
-
-Cache expensive database queries:
-
-```php
-$users = Cache::remember(\'users\', 3600, function () {
-    return User::with(\'profile\')->get();
-});
-```
-
-## 3. Use Database Indexing
-
-Add indexes to frequently queried columns:
-
-```php
-Schema::table(\'posts\', function (Blueprint $table) {
-    $table->index([\'user_id\', \'created_at\']);
-    $table->index(\'slug\');
-});
-```
-
-## 4. Optimize Composer Autoloader
-
-Use optimized autoloader in production:
-
-```bash
-composer install --optimize-autoloader --no-dev
-```
-
-## 5. Enable OPcache
-
-Configure OPcache in production environments:
-
-```ini
-opcache.enable=1
-opcache.memory_consumption=256
-opcache.max_accelerated_files=20000
-opcache.validate_timestamps=0
-```
-
-## 6. Use Select Specific Columns
-
-Don\'t load unnecessary data:
-
-```php
-// Bad - loads all columns
-$users = User::all();
-
-// Good - only loads needed columns
-$users = User::select(\'id\', \'name\', \'email\')->get();
-```
-
-## 7. Implement Route Caching
-
-Cache your routes in production:
-
-```bash
-php artisan route:cache
-```
-
-## 8. Use Queue Workers for Heavy Tasks
-
-Move time-consuming tasks to queues:
-
-```php
-// Instead of processing immediately
-Mail::to($user)->send(new WelcomeEmail());
-
-// Queue the job
-Mail::to($user)->queue(new WelcomeEmail());
-```
-
-## 9. Optimize Configuration Loading
-
-Cache configuration in production:
-
-```bash
-php artisan config:cache
-php artisan view:cache
-```
-
-## 10. Use Pagination for Large Datasets
-
-Don\'t load all records at once:
-
-```php
-// Bad - loads everything
-$posts = Post::all();
-
-// Good - paginated results
-$posts = Post::paginate(15);
-
-// Even better - cursor pagination for large datasets
-$posts = Post::cursorPaginate(15);
-```
-
-## Bonus: Monitor Performance
-
-Use Laravel Debugbar in development and monitoring tools like New Relic or Blackfire in production to identify bottlenecks.
-
-Implementing these tips can dramatically improve your Laravel application\'s performance, providing better user experience and reducing server costs.',
+By applying these performance tips, Laravel developers can create applications that are not only powerful but also highly optimized. A well-performing app enhances user satisfaction, improves SEO rankings, and reduces server costs. While Laravel provides a solid foundation out of the box, it’s up to developers to apply these best practices to unlock its full potential. Ultimately, consistent monitoring and optimization will ensure that Laravel applications remain fast, scalable, and reliable over time.',
                 'source' => 'Laravel community best practices and official documentation',
             ],
             [
@@ -842,151 +301,13 @@ Implementing these tips can dramatically improve your Laravel application\'s per
                 'category' => 'Tips',
                 'status' => 'published',
                 'excerpt' => 'Beyond the basics: advanced Git commands that will improve your development workflow and save you time.',
-                'content' => 'Most developers know the basic Git commands, but mastering these advanced commands will significantly improve your workflow and productivity.
+                'content' => 'Git has become an essential tool for modern software development, serving as the backbone of version control and collaboration. Whether you’re working solo or as part of a large team, mastering Git commands can dramatically improve your workflow and confidence when managing code. While there are many commands available, some are fundamental and should be second nature to every developer.<br><br>
 
-## 1. git rebase -i (Interactive Rebase)
+The first command every developer must know is git clone, which allows you to copy a remote repository to your local machine and start contributing right away. Another key command is git commit, used to save changes to the local repository with a descriptive message that tracks the history of your project. These two commands lay the foundation for effective version control by ensuring your codebase is both accessible and well-documented.<br><br>
 
-Clean up your commit history before merging:
+Equally important is git branch, which lets you create and manage branches for new features, bug fixes, or experiments without disrupting the main codebase. Alongside it, git merge enables you to combine changes from different branches, making collaboration smooth and efficient. Finally, git push is the command that shares your local changes with the remote repository, ensuring that your work is integrated with your team’s contributions.<br><br>
 
-```bash
-git rebase -i HEAD~3
-```
-
-This opens an interactive editor where you can:
-- **pick**: Keep the commit as-is
-- **reword**: Change the commit message
-- **squash**: Combine with previous commit
-- **drop**: Remove the commit entirely
-
-Example workflow:
-```bash
-# Clean up last 3 commits
-git rebase -i HEAD~3
-
-# In the editor:
-pick abc123f Add user authentication
-squash def456g Fix typo in auth
-squash ghi789h Update tests
-```
-
-Results in a single, clean commit with all changes.
-
-## 2. git bisect (Binary Search for Bugs)
-
-Find the exact commit that introduced a bug:
-
-```bash
-# Start bisecting
-git bisect start
-
-# Mark current commit as bad
-git bisect bad
-
-# Mark a known good commit
-git bisect good v1.2.0
-
-# Git will checkout commits for you to test
-# Mark each as good or bad
-git bisect good  # or git bisect bad
-
-# When found, reset
-git bisect reset
-```
-
-This uses binary search to quickly identify problematic commits in large codebases.
-
-## 3. git stash (Advanced Usage)
-
-Save and manage temporary changes:
-
-```bash
-# Stash with a message
-git stash push -m "Work in progress on user profiles"
-
-# Stash only specific files
-git stash push -m "Partial changes" file1.js file2.css
-
-# List all stashes
-git stash list
-
-# Apply specific stash without removing it
-git stash apply stash@{1}
-
-# Pop specific stash (apply and remove)
-git stash pop stash@{1}
-
-# Create a branch from a stash
-git stash branch feature-branch stash@{0}
-```
-
-## 4. git cherry-pick (Selective Commit Application)
-
-Apply specific commits from other branches:
-
-```bash
-# Pick a single commit
-git cherry-pick abc123f
-
-# Pick multiple commits
-git cherry-pick abc123f def456g
-
-# Pick a range of commits
-git cherry-pick abc123f..ghi789h
-
-# Pick without committing (for modifications)
-git cherry-pick --no-commit abc123f
-```
-
-Perfect for applying hotfixes across multiple branches or selective feature porting.
-
-## 5. git reflog (Recovery Tool)
-
-Recover "lost" commits and branches:
-
-```bash
-# View reflog
-git reflog
-
-# Output shows:
-# abc123f HEAD@{0}: commit: Add new feature
-# def456g HEAD@{1}: checkout: moving from main to feature
-# ghi789h HEAD@{2}: reset: moving to HEAD~1
-
-# Recover a reset commit
-git reset --hard abc123f
-
-# Recover a deleted branch
-git checkout -b recovered-branch ghi789h
-```
-
-Reflog is your safety net - it tracks all HEAD movements for 30 days by default.
-
-## Pro Tips for Daily Use
-
-### Combine Commands for Efficiency
-```bash
-# Add all changes and commit with message
-git add . && git commit -m "Your message"
-
-# Push new branch and set upstream
-git push -u origin feature-branch
-
-# Undo last commit but keep changes
-git reset HEAD~1
-```
-
-### Create Useful Aliases
-```bash
-git config --global alias.co checkout
-git config --global alias.br branch
-git config --global alias.ci commit
-git config --global alias.st status
-git config --global alias.unstage \'reset HEAD --\'
-git config --global alias.last \'log -1 HEAD\'
-git config --global alias.visual \'!gitk\'
-```
-
-Mastering these commands will make you more efficient with Git and help you handle complex scenarios with confidence.',
+By mastering these five essential Git commands, developers can handle most daily tasks confidently and efficiently. They form the foundation of collaborative development, allowing teams to experiment, iterate, and ship code without fear of losing work. While Git has many advanced features worth exploring, starting with these basics ensures that every developer can participate effectively in any project.',
                 'source' => 'Git documentation and developer community best practices',
             ],
         ];
@@ -1004,21 +325,44 @@ Mastering these commands will make you more efficient with Git and help you hand
             // Get featured image based on content
             $featuredImage = $this->getFeaturedImage($postData);
 
+            // Prepare meta data
+            $slug = Str::slug($postData['title']);
+
+            // Generate meta title (use original title or enhance it)
+            $metaTitle = $postData['title'];
+            if (strlen($metaTitle) < 40) {
+                $metaTitle .= ' - TechDaily Blog';
+            }
+
+            // Generate meta description from excerpt
+            $metaDescription = strip_tags($postData['excerpt']);
+            if (strlen($metaDescription) > 140) {
+                $metaDescription = substr($metaDescription, 0, 157) . '...';
+            }
+
+            // Generate meta keywords
+            $keywords = array_unique([
+                $category->name,  // Category as primary tag
+                ...array_filter(explode(' ', strtolower(preg_replace('/[^a-zA-Z0-9\s]/', '', $postData['title'])))),
+                ...$this->getRelevantTags($postData['content'], $category->name)
+            ]);
+
             Post::factory()->create([
                 'title' => $postData['title'],
+                'slug' => $slug,
                 'category_id' => $category->id,
                 'status' => $postData['status'],
                 'excerpt' => $postData['excerpt'],
                 'content' => $postData['content'],
                 'user_id' => $admin->id,
                 'created_at' => $created_at,
+                'updated_at' => $created_at,
                 'published_at' => $created_at,
                 'featured_image' => $featuredImage,
-                'meta_keywords' => implode(',', array_unique([
-                    $category->name,  // Category sebagai tag utama
-                    ...array_filter(explode(' ', strtolower(preg_replace('/[^a-zA-Z0-9\s]/', '', $postData['title'])))), // Words dari title
-                    ...$this->getRelevantTags($postData['content'], $category->name) // Tags dari content
-                ])),
+                'meta_title' => $metaTitle,
+                'meta_description' => $metaDescription,
+                'meta_keywords' => implode(', ', array_slice($keywords, 0, 10)),
+                'is_featured' => true,
             ]);
         }
 

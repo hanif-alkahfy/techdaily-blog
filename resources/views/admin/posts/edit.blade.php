@@ -48,7 +48,7 @@
         </div>
         <div>
             @if($post->status === 'published')
-                <a href="/posts/{{ $post->slug }}" target="_blank" class="btn btn-sm btn-outline-success">
+                <a href="/blog/{{ $post->slug }}" target="_blank" class="btn btn-sm btn-outline-success">
                     <i class="bi bi-box-arrow-up-right me-1"></i>View Live
                 </a>
             @endif
@@ -191,11 +191,11 @@
                                    id="meta_title"
                                    name="meta_title"
                                    value="{{ old('meta_title', $post->meta_title) }}"
-                                   maxlength="60"
+                                   maxlength="100"
                                    placeholder="SEO title (leave empty to use post title)">
                             <div class="form-text">
-                                <span id="metaTitleCounter" class="text-muted">{{ strlen(old('meta_title', $post->meta_title ?? '')) }}/60</span>
-                                characters (optimal: 50-60)
+                                <span id="metaTitleCounter" class="text-muted">{{ strlen(old('meta_title', $post->meta_title ?? '')) }}/100</span>
+                                characters (optimal: 50-100)
                             </div>
                         </div>
 
@@ -217,7 +217,7 @@
                                   id="meta_description"
                                   name="meta_description"
                                   rows="2"
-                                  maxlength="160"
+                                  maxlength="200"
                                   placeholder="Brief description for search engines...">{{ old('meta_description', $post->meta_description) }}</textarea>
                         <div class="form-text">
                             <span id="metaDescCounter" class="text-muted">{{ strlen(old('meta_description', $post->meta_description ?? '')) }}/160</span>
