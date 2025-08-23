@@ -130,10 +130,14 @@
                                             <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-sm btn-info">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="d-inline delete-post-form">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirmDelete()">
+                                                <button type="button"
+                                                        class="btn btn-sm btn-danger delete-post-btn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#deleteConfirmationModal"
+                                                        data-post-title="{{ $post->title }}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
@@ -263,6 +267,32 @@
     </div>
     @endif
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                    Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the post:</p>
+                <p class="fw-bold" id="deletePostTitle"></p>
+                <p class="mb-0 text-danger">This action cannot be undone!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="bi bi-trash me-2"></i>Delete Post
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('styles')
@@ -297,37 +327,83 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Posts Distribution Chart
-    const ctx = document.getElementById('postsChart').getContext('2d');
-    const postsChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Published', 'Drafts'],
-            datasets: [{
-                data: [{{ $posts_by_status['published'] }}, {{ $posts_by_status['draft'] }}],
-                backgroundColor: ['#198754', '#ffc107'],
-                borderWidth: 0,
-                cutout: '70%'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((context.parsed * 100) / total).toFixed(1);
-                            return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
-                        }
+// Delete confirmation with modal
+document.addEventListener('DOMContentLoaded', function() {
+    let formToSubmit = null;
+
+    // Handle delete button clicks
+    document.querySelectorAll('.delete-post-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const postTitle = this.getAttribute('data-post-title');
+            const form = this.closest('form');
+
+            // Store the form reference for later submission
+            formToSubmit = form;
+
+            // Update modal content
+            document.getElementById('deletePostTitle').textContent = postTitle;
+        });
+    });
+
+    // Handle confirm delete button in modal
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        if (formToSubmit) {
+            // Hide modal first
+            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmationModal'));
+            if (modal) {
+                modal.hide();
+            }
+
+            // Submit the form after modal is hidden
+            setTimeout(() => {
+                formToSubmit.submit();
+            }, 300);
+        }
+    });
+
+    // Clear form reference when modal is hidden
+    document.getElementById('deleteConfirmationModal').addEventListener('hidden.bs.modal', function() {
+        formToSubmit = null;
+    });
+});
+
+// Posts Distribution Chart
+const ctx = document.getElementById('postsChart').getContext('2d');
+const postsChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Published', 'Drafts'],
+        datasets: [{
+            data: [{{ $posts_by_status['published'] ?? 0 }}, {{ $posts_by_status['draft'] ?? 0 }}],
+            backgroundColor: ['#198754', '#ffc107'],
+            borderWidth: 0,
+            cutout: '70%'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = total > 0 ? ((context.parsed * 100) / total).toFixed(1) : 0;
+                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
                     }
                 }
             }
         }
-    });
+    }
+});
+
+// Initialize tooltips if any
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+});
 </script>
 @endpush
