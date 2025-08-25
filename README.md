@@ -152,34 +152,6 @@ DB_USERNAME=root                # Your MySQL username
 DB_PASSWORD=                    # Your MySQL password (leave empty if none)
 ```
 
-> 💡 **Pro Tip**: Create the database first using your MySQL client:
->
-> ```sql
-> CREATE DATABASE techdaily_blog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-> ```
-
-#### **Step 6: Activate MySQL Server** 🔌
-
-Make sure your MySQL server is running:
-
-**On Windows (using XAMPP):**
-
--   Start XAMPP Control Panel
--   Click "Start" for Apache and MySQL
-
-**On macOS (using Homebrew):**
-
-```bash
-brew services start mysql
-```
-
-**On Linux (using systemctl):**
-
-```bash
-sudo systemctl start mysql
-sudo systemctl enable mysql  # To start automatically on boot
-```
-
 #### **Step 7: Database Setup** 🏗️
 
 ```bash
@@ -188,7 +160,6 @@ php artisan setup:project
 
 > 🎉 **What happens here?**
 >
-> -   Create storage links
 > -   Creates all necessary database tables
 > -   Adds sample categories, posts, and an admin user
 > -   Links storage folder for image uploads
@@ -211,10 +182,10 @@ Once the server is running, you can access:
 
 | URL                                                                     | Purpose             | Description                                   |
 | ----------------------------------------------------------------------- | ------------------- | --------------------------------------------- |
-| **🏠 [http://localhost:8000](http://localhost:8000)**                   | **Main Blog**       | Public blog homepage with all published posts |
-| **🎮 [http://localhost:8000/admin](http://localhost:8000/admin)**       | **Admin Dashboard** | Content management system for authors         |
-| **📝 [http://localhost:8000/register](http://localhost:8000/register)** | **Registration**    | Create new author accounts                    |
-| **🔐 [http://localhost:8000/login](http://localhost:8000/login)**       | **Login**           | Sign in to admin dashboard                    |
+| [http://localhost:8000](http://localhost:8000)                   | **Main Blog**       | Public blog homepage with all published posts |
+| [http://localhost:8000/admin](http://localhost:8000/admin)       | **Admin Dashboard** | Content management system for authors         |
+| [http://localhost:8000/register](http://localhost:8000/register) | **Registration**    | Create new author accounts                    |
+| [http://localhost:8000/login](http://localhost:8000/login)       | **Login**           | Sign in to admin dashboard                    |
 
 ### 👤 Default Admin Access
 
@@ -652,7 +623,7 @@ This project is open-source software licensed under the [MIT License](https://op
 
 -   GitHub: [@hanif-alkahfy](https://github.com/hanif-alkahfy)
 -   Email: hanifalkahfy@gmail.com
--   LinkedIn: [Hanif Al-Kahfi](https://linkedin.com/in/hanif-alkahfy)
+-   LinkedIn: [Hanif Alkahfy](https://linkedin.com/in/hanif-alkahfy)
 
 ## Acknowledgments
 
